@@ -1,4 +1,4 @@
 package com.medirec.medirec.Models;
 
-public class Usuario {
+public class User {
 }
