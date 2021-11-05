@@ -73,6 +73,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.modelmapper.extensions/modelmapper-spring -->
+        <dependency>
+            <groupId>org.modelmapper.extensions</groupId>
+            <artifactId>modelmapper-spring</artifactId>
+            <version>2.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>
