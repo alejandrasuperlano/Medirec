@@ -1,10 +1,6 @@
 package com.medirec.medirec.Models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -37,6 +33,10 @@ public class PatientContact {
     )
     private String type;
 
+    // ------------------------------- RELATIONSHIPS ------------------------------- //
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient")
+    private Patient patient;
 
     public PatientContact(String contactName, String contactLastName, String contactPhoneNumber, String type) {
         this.contactName = contactName;

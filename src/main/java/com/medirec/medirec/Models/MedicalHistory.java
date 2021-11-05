@@ -1,9 +1,6 @@
 package com.medirec.medirec.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -16,5 +13,8 @@ public class MedicalHistory {
     )
     private Long medicalHistoryId;
 
+    // -----------RELATIONSHIPS -------------//
+    @OneToOne(mappedBy = "patientMedicalHistoryId")
+    private Patient patient;
     // TODO: Implementar el resto de atributos (listas)
 }

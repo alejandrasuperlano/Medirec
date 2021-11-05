@@ -1,12 +1,7 @@
 package com.medirec.medirec.Models;
 
 import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -33,6 +28,10 @@ public class Appointment {
         nullable = false
     )
     private String physicalExamination;
+    // ------------------------------- RELATIONSHIPS ------------------------------- //
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient")
+    private Patient patient;
 
     public Appointment(String reason, LocalDate appointmentDate, String physicalExamination) {
         this.reason = reason;
