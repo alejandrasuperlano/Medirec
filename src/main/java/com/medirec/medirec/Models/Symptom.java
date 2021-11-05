@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -17,7 +19,7 @@ public class Symptom {
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
-    private Long symptomId;
+    private int symptomId;
 
     @Column(
         nullable = false
@@ -29,6 +31,12 @@ public class Symptom {
     )
     private LocalDate date;
 
+    @ManyToOne()
+    @JoinColumn(
+        name = "medicalHistoryId",
+        referencedColumnName = "medicalHistoryId"
+    )
+    private MedicalHistory medicalHistory;
 
     public Symptom(String description, LocalDate date) {
         this.description = description;

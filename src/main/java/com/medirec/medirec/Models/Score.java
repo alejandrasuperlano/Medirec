@@ -15,7 +15,7 @@ public class Score {
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
-    private Long scoreId;
+    private int scoreId;
 
     @Column(
         nullable = false

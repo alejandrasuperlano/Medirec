@@ -17,6 +17,7 @@ class SymptomRepositoryTest {
 
     @Test
     public void addSymptom(){
+        
         Symptom symptom = new Symptom("Dolor de muela", LocalDate.now());
 
         repository.save(symptom);

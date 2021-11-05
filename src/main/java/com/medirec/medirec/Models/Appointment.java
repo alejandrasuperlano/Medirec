@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 import lombok.Data;
 
+
 @Entity
 @Data
 public class Appointment {
@@ -17,7 +18,7 @@ public class Appointment {
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
-    private Long appointmentId;
+    private int appointmentId;
 
     @Column(
         nullable = false

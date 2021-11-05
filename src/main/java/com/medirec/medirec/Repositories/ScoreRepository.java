@@ -4,6 +4,6 @@ import com.medirec.medirec.Models.Score;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ScoreRepository extends JpaRepository<Score, Long>{
+public interface ScoreRepository extends JpaRepository<Score, Integer>{
     
 }

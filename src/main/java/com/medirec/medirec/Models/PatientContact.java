@@ -15,7 +15,7 @@ public class PatientContact {
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
-    private Long contactId;
+    private int contactId;
 
     @Column(
         nullable = false
