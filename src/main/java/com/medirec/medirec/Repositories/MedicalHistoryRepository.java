@@ -2,8 +2,12 @@ package com.medirec.medirec.Repositories;
 
 import com.medirec.medirec.Models.MedicalHistory;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Integer>{
+@Repository
+@Transactional
+public interface MedicalHistoryRepository extends CrudRepository<MedicalHistory, Integer>{
     
 }
