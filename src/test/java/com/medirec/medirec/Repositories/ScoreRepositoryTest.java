@@ -2,6 +2,7 @@ package com.medirec.medirec.Repositories;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Models.Score;
 
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,9 @@ class ScoreRepositoryTest {
 
     @Test
     public void saveScore(){
-        Score score = new Score(4, "Bien");
+        // Patient patient = new Patient();
 
-        repository.save(score);
+        // repository.save(score);
     }
 
 

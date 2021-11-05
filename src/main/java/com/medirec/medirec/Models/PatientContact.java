@@ -1,11 +1,15 @@
 package com.medirec.medirec.Models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class PatientContact {
     @Id
     @GeneratedValue(
@@ -13,30 +17,21 @@ public class PatientContact {
     )
     private int contactId;
 
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotBlank
     private String contactName;
 
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotBlank
     private String contactLastName;
 
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotBlank
     private String contactPhoneNumber;
     
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotBlank
     private String type;
-
-    // ------------------------------- RELATIONSHIPS ------------------------------- //
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient")
-    private Patient patient;
 
     public PatientContact(String contactName, String contactLastName, String contactPhoneNumber, String type) {
         this.contactName = contactName;
@@ -45,5 +40,11 @@ public class PatientContact {
         this.type = type;
     }
 
-    
+    // ------------------------------- RELATIONSHIPS ------------------------------- //
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "patientId",
+        referencedColumnName = "userId"
+    )
+    private Patient patient;
 }

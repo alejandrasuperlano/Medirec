@@ -1,13 +1,19 @@
 package com.medirec.medirec.Models;
 
 import java.time.LocalDate;
+import java.util.Date;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Appointment {
     @Id
     @GeneratedValue(
@@ -15,26 +21,32 @@ public class Appointment {
     )
     private int appointmentId;
 
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotBlank
     private String reason;
-
-    @Column(
-        nullable = false
-    )
-    private LocalDate appointmentDate;
     
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotNull
+    private Date appointmentDate;
+    
+    @Column()
+    @NotBlank
     private String physicalExamination;
+    
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient")
+    @JoinColumn(name = "patientId")
     private Patient patient;
 
-    public Appointment(String reason, LocalDate appointmentDate, String physicalExamination) {
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicalHistoryId")
+    private MedicalHistory medicalHistory;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctorId")
+    private Doctor doctor;
+
+    public Appointment(String reason, Date appointmentDate, String physicalExamination) {
         this.reason = reason;
         this.appointmentDate = appointmentDate;
         this.physicalExamination = physicalExamination;

@@ -16,10 +16,10 @@ class AppointmentRepositoryTest {
     @Autowired
     private AppointmentRepository repository;
 
-    @Test
-    public void addAppointment(){
-        Appointment appointment = new Appointment("Control", LocalDate.now(), "Revisión de tensión");
+    // @Test
+    // public void addAppointment(){
+    //     Appointment appointment = new Appointment("Control", LocalDate.now(), "Revisión de tensión");
 
-        repository.save(appointment);
-    }
+    //     repository.save(appointment);
+    // }
 }

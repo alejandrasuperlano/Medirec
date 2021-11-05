@@ -12,26 +12,29 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class MedicalHistory {
     @Id
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
     private int medicalHistoryId;
+    
+    
+    // -----------RELATIONSHIPS -------------//
+    @OneToOne(mappedBy = "patientMedicalHistory")
+    private Patient patient;
 
     // @JsonIgnore
     @OneToMany(mappedBy = "medicalHistory")
     private List<Symptom> symptoms;
     
-    public MedicalHistory() {
-    }
-
-
-    // -----------RELATIONSHIPS -------------//
-    @OneToOne(mappedBy = "patientMedicalHistoryId")
-    private Patient patient;
+    @OneToMany(mappedBy = "medicalHistory")
+    private List<Appointment> appointments;
+    
     // TODO: Implementar el resto de atributos (listas)
 }

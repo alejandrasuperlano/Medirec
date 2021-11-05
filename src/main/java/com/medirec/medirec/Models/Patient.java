@@ -26,12 +26,12 @@ public class Patient extends User{
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medicalHistoryId", referencedColumnName = "medicalHistoryId")
-    private MedicalHistory patientMedicalHistoryId;
+    private MedicalHistory patientMedicalHistory;
 
     //Mapped by = nombre del atributo en la entidad donde esta el ManyToOne
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
-    @Column(name = "patientContactId")
-    private List<PatientContact> patientContactId;
+    @Column(name = "patientContacts")
+    private List<PatientContact> patientContacts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
     @Column(name = "patientAppointments")

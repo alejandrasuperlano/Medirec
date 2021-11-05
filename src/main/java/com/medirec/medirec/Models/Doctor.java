@@ -1,6 +1,7 @@
 package com.medirec.medirec.Models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
@@ -33,11 +34,14 @@ public class Doctor extends User{
     @NotBlank
     private String doctorProfessionalCard;
 
-
     // ------------------------------- RELATIONSHIPS ------------------------------- //
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctorScore")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     @Column(name = "doctorScores")
     private List<Score> doctorScores;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
+    @Column(name = "doctorAppointments")
+    private List<Appointment> doctorAppointments;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
     @Column(name = "doctorPatients")

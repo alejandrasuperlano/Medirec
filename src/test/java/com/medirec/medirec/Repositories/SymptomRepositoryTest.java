@@ -3,6 +3,7 @@ package com.medirec.medirec.Repositories;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.medirec.medirec.Models.Symptom;
 
@@ -15,11 +16,11 @@ class SymptomRepositoryTest {
     @Autowired
     private SymptomRepository repository;
 
-    @Test
-    public void addSymptom(){
+    // @Test
+    // public void addSymptom(){
         
-        Symptom symptom = new Symptom("Dolor de muela", LocalDate.now());
+    //     Symptom symptom = new Symptom("Dolor de muela", D);
 
-        repository.save(symptom);
-    }
+    //     repository.save(symptom);
+    // }
 }

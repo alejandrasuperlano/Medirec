@@ -1,6 +1,7 @@
 package com.medirec.medirec.Models;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Symptom {
     @Id
     @GeneratedValue(
@@ -21,15 +26,20 @@ public class Symptom {
     )
     private int symptomId;
 
-    @Column(
-        nullable = false
-    )
+    @Column()
+    @NotBlank
     private String description;
 
-    @Column(
-        nullable = false
-    )
-    private LocalDate date;
+    @Column()
+    @NotNull
+    private Date date;
+
+    public Symptom(String description, Date date) {
+        this.description = description;
+        this.date = date;
+    }
+
+    // ------------------------------- RELATIONSHIPS ------------------------------- //
 
     @ManyToOne()
     @JoinColumn(
@@ -37,10 +47,4 @@ public class Symptom {
         referencedColumnName = "medicalHistoryId"
     )
     private MedicalHistory medicalHistory;
-
-    public Symptom(String description, LocalDate date) {
-        this.description = description;
-        this.date = date;
-    }
-
 }
