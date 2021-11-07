@@ -2,12 +2,7 @@ package com.medirec.medirec.Models;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,6 +30,13 @@ public class MedicalHistory {
     
     @OneToMany(mappedBy = "medicalHistory")
     private List<Appointment> appointments;
-    
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicalHistory")
+    @Column(name = "personalRecords")
+    private List<PersonalRecord> personalRecords;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicalHistory")
+    @Column(name = "illnesses")
+    private List<Illness> illnesses;
     // TODO: Implementar el resto de atributos (listas)
 }
