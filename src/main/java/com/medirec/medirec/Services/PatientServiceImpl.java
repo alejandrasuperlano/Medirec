@@ -37,6 +37,7 @@ public class PatientServiceImpl implements PatientService {
     public void completeRegistration(int id, String address, String birthDay, String gender,String maritalStatus){
         
         Optional<Patient> result = repository.findById(id);
+        
         if(!result.isPresent()){
             throw new IllegalStateException("no patient with given id");
         }else{
