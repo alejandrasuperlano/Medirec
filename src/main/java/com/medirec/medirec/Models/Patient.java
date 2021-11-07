@@ -42,6 +42,8 @@ public class Patient extends User{
         super();
     }
 
+    /*@Transient
+        private int role;*/
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medicalHistoryId", referencedColumnName = "medicalHistoryId")
@@ -63,5 +65,11 @@ public class Patient extends User{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     @Column(name = "patientDoctors")
     private List<Access> patientDoctors;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "patientId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private List<Role> roles;
 
 }

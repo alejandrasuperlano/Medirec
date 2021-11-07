@@ -52,6 +52,9 @@ public class Doctor extends User{
     }
 
 
+    /*@Transient
+    private int role;*/
+
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     @Column(name = "doctorScores")
@@ -64,4 +67,11 @@ public class Doctor extends User{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
     @Column(name = "doctorPatients")
     private List<Access> doctorPatients;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "doctorId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private List<Role> roles;
+
 }

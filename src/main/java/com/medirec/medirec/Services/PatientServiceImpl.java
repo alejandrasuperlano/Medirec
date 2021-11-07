@@ -16,27 +16,27 @@ import org.springframework.stereotype.Service;
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
-    PatientRepository repository;
+    PatientRepository patientRepository;
 
     @Autowired
     BCryptPasswordEncoder encoder;
 
     public void registerPatient(Patient patient){
 
-        boolean emailExists = repository.findByUserEmail(patient.getUserEmail()).isPresent();
+        boolean emailExists = patientRepository.findByUserEmail(patient.getUserEmail()).isPresent();
         if(emailExists){
             throw new IllegalStateException("email already taken");
         }else{
             String encodedPassword = encoder.encode(patient.getUserPassword());
             patient.setUserPassword(encodedPassword);
-            repository.save(patient);
+            patientRepository.save(patient);
         }
         
     }
     
     public void completeRegistration(int id, String address, String birthDay, String gender,String maritalStatus){
         
-        Optional<Patient> result = repository.findById(id);
+        Optional<Patient> result = patientRepository.findById(id);
         
         if(!result.isPresent()){
             throw new IllegalStateException("no patient with given id");
@@ -55,7 +55,16 @@ public class PatientServiceImpl implements PatientService {
             patient.setUserGender(gender);
             patient.setPatientMaritalStatus(maritalStatus);
             
-            repository.save(patient);
+            patientRepository.save(patient);
+        }
+    }
+
+    @Override
+    public Patient getPatientByEmail(String email) {
+        if(patientRepository.findPatientByUserEmail(email).isPresent()){
+            return patientRepository.findPatientByUserEmail(email).get();
+        } else {
+            return null;
         }
     }
 }
