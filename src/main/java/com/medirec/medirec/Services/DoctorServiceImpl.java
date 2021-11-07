@@ -36,7 +36,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     public void completeRegistration(int id, String address, String birthDay, String gender,
                                     String consultory, int experience, String university){
-        Optional<Doctor> result = repository.findById(id);
+        
+                                        Optional<Doctor> result = repository.findById(id);
 
         if(!result.isPresent()){
             throw new IllegalStateException("no doctor with given id");

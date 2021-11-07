@@ -13,4 +13,5 @@ public interface DoctorRepository extends CrudRepository <Doctor, Integer>{
     
     public Optional<Doctor> findByUserEmail(String email);
     
+    
 }

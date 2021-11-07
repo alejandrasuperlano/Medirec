@@ -12,4 +12,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PatientRepository extends CrudRepository<Patient, Integer> {
 
     public Optional<Patient> findByUserEmail(String email);
+    
 }
