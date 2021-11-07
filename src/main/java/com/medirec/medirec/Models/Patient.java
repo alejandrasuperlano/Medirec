@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "PATIENT")
+@Getter
+@Setter
 public class Patient extends User{
 
     @Column(name = "patientEps")
@@ -69,6 +71,5 @@ public class Patient extends User{
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private List<Role> roles;
-
 
 }
