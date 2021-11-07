@@ -1,7 +1,6 @@
 package com.medirec.medirec.Controllers;
 
 import com.medirec.medirec.Services.Interfaces.DoctorService;
-import com.medirec.medirec.Services.Interfaces.PatientService;
 import com.medirec.medirec.Services.Interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

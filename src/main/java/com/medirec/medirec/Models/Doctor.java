@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
@@ -19,20 +21,36 @@ public class Doctor extends User{
     private String doctorSpecialization;
 
     @Column(name = "doctorUniversity")
-    @NotBlank
     private String doctorUniversity;
 
     @Column(name = "doctorExperience")
-    @NotNull
     private int doctorExperience;
 
     @Column(name = "doctorConsultory")
-    @NotBlank
     private String doctorConsultory;
 
     @Column(name = "doctorProfessionalCard")
     @NotBlank
     private String doctorProfessionalCard;
+
+    // Register constructor
+    public Doctor(String userFirstName, String userLastName, String userDocType, 
+                String userDoc, String userEmail, String userPassword, String doctorSpecialization, String doctorProfessionalCard) {
+        
+        super(userFirstName, userLastName, userDocType, userDoc, userEmail, userPassword);
+        this.doctorSpecialization = doctorSpecialization;
+        this.doctorProfessionalCard = doctorProfessionalCard;
+
+        this.doctorAppointments = new ArrayList<>();
+        this.doctorScores = new ArrayList<>();
+        this.doctorPatients = new ArrayList<>();
+    
+    }
+
+    public Doctor(){
+        super();
+    }
+
 
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")

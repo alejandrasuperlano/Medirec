@@ -26,6 +26,10 @@ public class User {
     @NotBlank
     private String userDocType;
 
+    @Column(name = "userDoc")
+    @NotBlank
+    private String userDoc;
+
     @Column(name = "userEmail")
     @NotBlank
     private String userEmail;
@@ -35,19 +39,32 @@ public class User {
     private String userPassword;
 
     @Column(name = "userBirthDay")
-    @NotNull
     private Date userBirthDay;
 
     @Column(name = "userGender")
-    @NotBlank
     private String userGender;
 
     @Column(name = "userAddress")
-    @NotBlank
     private String userAddress;
 
     @Column(name = "userTutorial")
     @NotNull // 1 = done, 0 = not yet
     private int userTutorial;
+
+
+    // Register constructor
+    public User(String userFirstName, String userLastName, String userDocType, String userDoc, String userEmail, String userPassword) {
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userDocType = userDocType;
+        this.userDoc = userDoc;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+    }
+
+    public User(){
+        
+    }
+
 
 }

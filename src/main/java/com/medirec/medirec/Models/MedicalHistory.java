@@ -23,6 +23,8 @@ public class MedicalHistory {
         strategy = GenerationType.IDENTITY
     )
     private int medicalHistoryId;
+
+    
     
     
     // -----------RELATIONSHIPS -------------//

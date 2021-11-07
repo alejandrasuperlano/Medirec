@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "PATIENT")
@@ -20,8 +20,27 @@ public class Patient extends User{
     private String patientEps;
 
     @Column(name = "patientMaritalStatus")
-    @NotBlank
     private String patientMaritalStatus;
+
+    // Register constructor
+    public Patient(String userFirstName, String userLastName, String userDocType, 
+                    String userDoc, String userEmail, String userPassword, String patientEps) {
+
+        super(userFirstName, userLastName, userDocType, userDoc, userEmail, userPassword);
+        this.patientEps = patientEps;
+
+        this.patientAppointments = new ArrayList<>();
+        this.patientContacts = new ArrayList<>();
+        this.patientReviews = new ArrayList<>();
+        this.patientDoctors = new ArrayList<>();
+
+        this.patientMedicalHistory = new MedicalHistory();
+    
+    }
+
+    public Patient(){
+        super();
+    }
 
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @OneToOne(cascade = CascadeType.ALL)
