@@ -36,5 +36,9 @@ public class MedicalHistory {
     @OneToMany(mappedBy = "medicalHistory")
     private List<Appointment> appointments;
     
-    // TODO: Implementar el resto de atributos (listas)
+    @OneToMany(mappedBy = "medicalHistory")
+    private List<FamilyBackground> familyBackgrounds;
+    
+    @OneToMany(mappedBy = "medicalHistory")
+    private List<Allergy> allergies;
 }
