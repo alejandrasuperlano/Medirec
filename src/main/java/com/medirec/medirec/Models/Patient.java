@@ -68,7 +68,7 @@ public class Patient extends User{
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "patientId"),
+            joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private List<Role> roles;
 
