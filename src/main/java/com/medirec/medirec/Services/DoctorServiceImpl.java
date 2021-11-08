@@ -1,9 +1,12 @@
 package com.medirec.medirec.Services;
 
+import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Repositories.DoctorRepository;
 import com.medirec.medirec.Services.Interfaces.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,44 +33,46 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
-    public void registerDoctor(Doctor doctor){
+    public ResponseEntity<String> registerDoctor(Doctor doctor){
 
         boolean emailExists = doctorRepository.findByUserEmail(doctor.getUserEmail()).isPresent();
         if(emailExists){
-            throw new IllegalStateException("email already taken");
+            return new ResponseEntity<String>("Email already taken", HttpStatus.BAD_REQUEST);
         }else{
             String encodedPassword = encoder.encode(doctor.getUserPassword());
             doctor.setUserPassword(encodedPassword);
             doctorRepository.save(doctor);
+            return new ResponseEntity<String>("Doctor registered succesfully", HttpStatus.OK);
         }
 
     }
 
-    public void completeRegistration(int id, String address, String birthDay, String gender,
-                                     String consultory, int experience, String university) {
+    public ResponseEntity<String> completeRegistration(DoctorCompleteRegistrationDto doctorDto) {
 
-        Optional<Doctor> result = doctorRepository.findById(id);
+        Optional<Doctor> result = doctorRepository.findById(doctorDto.getId());
 
         if (!result.isPresent()) {
-            throw new IllegalStateException("no doctor with given id");
+            return new ResponseEntity<String>("No doctor with given id", HttpStatus.BAD_REQUEST);
         } else {
             Doctor doctor = result.get();
-
+            
             Date birthDayDate;
             try {
-                birthDayDate = new SimpleDateFormat("dd/MM/yyyy").parse("10/01/2001");
+                birthDayDate = new SimpleDateFormat("dd/MM/yyyy").parse(doctorDto.getBirthDay());
             } catch (ParseException e) {
-                throw new IllegalStateException("error parsing birthday date");
+                return new ResponseEntity<String>("Error parsing birthday date", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
-            doctor.setUserAddress(address);
+            
+            doctor.setUserAddress(doctorDto.getAddress());
             doctor.setUserBirthDay(birthDayDate);
-            doctor.setUserGender(gender);
-            doctor.setDoctorConsultory(consultory);
-            doctor.setDoctorExperience(experience);
-            doctor.setDoctorUniversity(university);
-
+            doctor.setUserGender(doctorDto.getGender());
+            doctor.setDoctorConsultory(doctorDto.getConsultory());
+            doctor.setDoctorExperience(doctorDto.getExperience());
+            doctor.setDoctorUniversity(doctorDto.getUniversity());
+            
             doctorRepository.save(doctor);
+
+            return new ResponseEntity<String>("Doctor complete registration succesfully", HttpStatus.OK);
         }
     }
 }

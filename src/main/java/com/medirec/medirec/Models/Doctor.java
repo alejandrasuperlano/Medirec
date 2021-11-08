@@ -44,11 +44,15 @@ public class Doctor extends User{
         this.doctorAppointments = new ArrayList<>();
         this.doctorScores = new ArrayList<>();
         this.doctorPatients = new ArrayList<>();
-    
+        
     }
-
+    
     public Doctor(){
         super();
+        
+        this.doctorAppointments = new ArrayList<>();
+        this.doctorScores = new ArrayList<>();
+        this.doctorPatients = new ArrayList<>();
     }
 
 

@@ -40,6 +40,13 @@ public class Patient extends User{
 
     public Patient(){
         super();
+        
+        this.patientAppointments = new ArrayList<>();
+        this.patientContacts = new ArrayList<>();
+        this.patientReviews = new ArrayList<>();
+        this.patientDoctors = new ArrayList<>();
+
+        this.patientMedicalHistory = new MedicalHistory();
     }
 
     /*@Transient

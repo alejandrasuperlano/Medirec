@@ -1,13 +1,17 @@
 package com.medirec.medirec.Controllers;
 
+import javax.print.Doc;
+
+import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
+import com.medirec.medirec.Dto.DoctorRegistrationDto;
+import com.medirec.medirec.Dto.PatientCompleteRegistrationDto;
 import com.medirec.medirec.Dto.PatientRegistrationDto;
+import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Services.DoctorServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
-import com.medirec.medirec.Services.Interfaces.DoctorService;
-import com.medirec.medirec.Services.Interfaces.PatientService;
-import com.medirec.medirec.Services.Interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,13 +32,8 @@ public class RegisterController {
     @Autowired
     ModelMapper modelMapper;
 
-    @GetMapping(path = "patient")
-    public String test(){
-        return "this is a test";
-    }
-
     @PostMapping(path = "patient")
-    public void registerPatient(@RequestBody PatientRegistrationDto patientDto){
+    public ResponseEntity<String> registerPatient(@RequestBody PatientRegistrationDto patientDto){
         Patient patient = modelMapper.typeMap(PatientRegistrationDto.class, Patient.class).addMappings(mapper ->{
             mapper.map(src -> src.getFirstName(),
             Patient::setUserFirstName);
@@ -51,7 +50,41 @@ public class RegisterController {
             mapper.map(src -> src.getEps(),
             Patient::setPatientEps);
         }).map(patientDto);
+
+        return patientService.registerPatient(patient);
+    }
+    
+    @PostMapping(path = "doctor")
+    public ResponseEntity<String> registerDoctor(@RequestBody DoctorRegistrationDto doctorDto){
+        Doctor doctor = modelMapper.typeMap(DoctorRegistrationDto.class, Doctor.class).addMappings(mapper ->{
+            mapper.map(src -> src.getFirstName(),
+            Doctor::setUserFirstName);
+            mapper.map(src -> src.getLastName(),
+            Doctor::setUserLastName);
+            mapper.map(src -> src.getDocType(),
+            Doctor::setUserDocType);
+            mapper.map(src -> src.getDoc(),
+            Doctor::setUserDoc);
+            mapper.map(src -> src.getEmail(),
+            Doctor::setUserEmail);
+            mapper.map(src -> src.getPassword(),
+            Doctor::setUserPassword);
+            mapper.map(src -> src.getSpecialization(),
+            Doctor::setDoctorSpecialization);
+            mapper.map(src -> src.getProfessionalCard(),
+            Doctor::setDoctorProfessionalCard);
+        }).map(doctorDto);
         
-        patientService.registerPatient(patient);
+        return doctorService.registerDoctor(doctor);
+    }
+
+    @PostMapping(path = "patient/complete")
+    public ResponseEntity<String> completePatientRegistration(@RequestBody PatientCompleteRegistrationDto patientDto){
+        return patientService.completeRegistration(patientDto);
+    }
+    
+    @PostMapping(path = "doctor/complete")
+    public ResponseEntity<String> completePatientRegistration(@RequestBody DoctorCompleteRegistrationDto doctorDto){
+        return doctorService.completeRegistration(doctorDto);
     }
 }
