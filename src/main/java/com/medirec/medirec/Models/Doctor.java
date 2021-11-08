@@ -1,17 +1,12 @@
 package com.medirec.medirec.Models;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "DOCTOR", uniqueConstraints = @UniqueConstraint(columnNames = "doctorProfessionalCard"))

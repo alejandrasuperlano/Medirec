@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.lang.Nullable;
-
 @Entity
 @Table(name = "PATIENT")
 @Getter

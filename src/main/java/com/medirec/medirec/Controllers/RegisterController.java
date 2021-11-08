@@ -1,7 +1,5 @@
 package com.medirec.medirec.Controllers;
 
-import javax.print.Doc;
-
 import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
 import com.medirec.medirec.Dto.DoctorRegistrationDto;
 import com.medirec.medirec.Dto.PatientCompleteRegistrationDto;
@@ -12,7 +10,6 @@ import com.medirec.medirec.Services.DoctorServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

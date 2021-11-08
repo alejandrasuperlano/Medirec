@@ -1,6 +1,5 @@
 package com.medirec.medirec.Security.JWT;
 
-import com.medirec.medirec.Security.Model.UserSessionDetails;
 import com.medirec.medirec.Security.Service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

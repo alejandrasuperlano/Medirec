@@ -3,10 +3,6 @@ package com.medirec.medirec.Models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import javax.print.Doc;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "ACCESS")

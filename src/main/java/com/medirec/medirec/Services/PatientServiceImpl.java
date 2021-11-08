@@ -41,11 +41,11 @@ public class PatientServiceImpl implements PatientService {
 
             patientRepository.save(patient);
 
-            // Patient addedPatient = patientRepository.findByUserEmail(patient.getUserEmail()).get();
+            Patient addedPatient = patientRepository.findByUserEmail(patient.getUserEmail()).get();
             
-            // Role role = roleRepository.findByRoleName("PATIENT").get();
+            Role role = roleRepository.findByRoleName("PATIENT").get();
             
-            // patientRepository.addRole(addedPatient.getUserId(), role.getRoleId());
+            patientRepository.addRole(addedPatient.getUserId(), role.getRoleId());
 
             return new ResponseEntity<String>("Patient registered succesfully", HttpStatus.OK);
         }

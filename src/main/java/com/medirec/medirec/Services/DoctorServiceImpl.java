@@ -52,11 +52,11 @@ public class DoctorServiceImpl implements DoctorService {
             
             doctorRepository.save(doctor);
             
-            // Doctor addedDoctor = doctorRepository.findByUserEmail(doctor.getUserEmail()).get();
+            Doctor addedDoctor = doctorRepository.findByUserEmail(doctor.getUserEmail()).get();
             
-            // Role role = roleRepository.findByRoleName("DOCTOR").get();
+            Role role = roleRepository.findByRoleName("DOCTOR").get();
             
-            // doctorRepository.addRole(addedDoctor.getUserId(), role.getRoleId());
+            doctorRepository.addRole(addedDoctor.getUserId(), role.getRoleId());
 
             return new ResponseEntity<String>("Doctor registered succesfully", HttpStatus.OK);
         }
