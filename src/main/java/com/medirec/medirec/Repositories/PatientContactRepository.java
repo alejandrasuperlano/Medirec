@@ -13,5 +13,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface PatientContactRepository extends CrudRepository<PatientContact, Integer>{
     
-    // public Optional<Patient> findBy
 }

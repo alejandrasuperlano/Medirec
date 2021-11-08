@@ -8,7 +8,9 @@ import java.util.Optional;
 import com.medirec.medirec.Dto.PatientCompleteRegistrationDto;
 import com.medirec.medirec.Dto.PatientRegistrationDto;
 import com.medirec.medirec.Models.Patient;
+import com.medirec.medirec.Models.Role;
 import com.medirec.medirec.Repositories.PatientRepository;
+import com.medirec.medirec.Repositories.RoleRepository;
 import com.medirec.medirec.Services.Interfaces.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,9 @@ public class PatientServiceImpl implements PatientService {
     PatientRepository patientRepository;
 
     @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
     BCryptPasswordEncoder encoder;
 
     public ResponseEntity<String> registerPatient(Patient patient){
@@ -33,7 +38,15 @@ public class PatientServiceImpl implements PatientService {
         }else{
             String encodedPassword = encoder.encode(patient.getUserPassword());
             patient.setUserPassword(encodedPassword);
+
             patientRepository.save(patient);
+
+            // Patient addedPatient = patientRepository.findByUserEmail(patient.getUserEmail()).get();
+            
+            // Role role = roleRepository.findByRoleName("PATIENT").get();
+            
+            // patientRepository.addRole(addedPatient.getUserId(), role.getRoleId());
+
             return new ResponseEntity<String>("Patient registered succesfully", HttpStatus.OK);
         }
         

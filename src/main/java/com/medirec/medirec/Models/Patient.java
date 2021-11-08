@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.lang.Nullable;
+
 @Entity
 @Table(name = "PATIENT")
 @Getter
@@ -33,11 +35,12 @@ public class Patient extends User{
         this.patientContacts = new ArrayList<>();
         this.patientReviews = new ArrayList<>();
         this.patientDoctors = new ArrayList<>();
-
+        this.roles = new ArrayList<>();
+        
         this.patientMedicalHistory = new MedicalHistory();
-    
+        
     }
-
+    
     public Patient(){
         super();
         
@@ -45,8 +48,13 @@ public class Patient extends User{
         this.patientContacts = new ArrayList<>();
         this.patientReviews = new ArrayList<>();
         this.patientDoctors = new ArrayList<>();
+        this.roles = new ArrayList<>();
 
         this.patientMedicalHistory = new MedicalHistory();
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 
     /*@Transient
@@ -75,8 +83,14 @@ public class Patient extends User{
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+        joinColumns = @JoinColumn(
+            nullable = true,
+            name = "patientId"
+        ),
+        inverseJoinColumns = @JoinColumn(
+            name = "roleId"
+        )
+    )
     private List<Role> roles;
 
 }

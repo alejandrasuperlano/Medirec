@@ -11,6 +11,8 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.lang.Nullable;
+
 @Entity
 @Table(name = "DOCTOR", uniqueConstraints = @UniqueConstraint(columnNames = "doctorProfessionalCard"))
 @Getter
@@ -44,6 +46,7 @@ public class Doctor extends User{
         this.doctorAppointments = new ArrayList<>();
         this.doctorScores = new ArrayList<>();
         this.doctorPatients = new ArrayList<>();
+        this.roles = new ArrayList<>();
         
     }
     
@@ -53,6 +56,11 @@ public class Doctor extends User{
         this.doctorAppointments = new ArrayList<>();
         this.doctorScores = new ArrayList<>();
         this.doctorPatients = new ArrayList<>();
+        this.roles = new ArrayList<>();
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 
 
@@ -73,9 +81,16 @@ public class Doctor extends User{
     private List<Access> doctorPatients;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(
+            nullable = true,
+            name = "doctorId"
+        ),
+        inverseJoinColumns = @JoinColumn(
+            name = "roleId"
+        )
+    )
     private List<Role> roles;
 
 }

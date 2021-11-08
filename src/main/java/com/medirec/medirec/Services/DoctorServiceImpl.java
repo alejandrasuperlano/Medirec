@@ -2,7 +2,9 @@ package com.medirec.medirec.Services;
 
 import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
 import com.medirec.medirec.Models.Doctor;
+import com.medirec.medirec.Models.Role;
 import com.medirec.medirec.Repositories.DoctorRepository;
+import com.medirec.medirec.Repositories.RoleRepository;
 import com.medirec.medirec.Services.Interfaces.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +25,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     DoctorRepository doctorRepository;
+    
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     BCryptPasswordEncoder encoder;
@@ -41,7 +49,15 @@ public class DoctorServiceImpl implements DoctorService {
         }else{
             String encodedPassword = encoder.encode(doctor.getUserPassword());
             doctor.setUserPassword(encodedPassword);
+            
             doctorRepository.save(doctor);
+            
+            // Doctor addedDoctor = doctorRepository.findByUserEmail(doctor.getUserEmail()).get();
+            
+            // Role role = roleRepository.findByRoleName("DOCTOR").get();
+            
+            // doctorRepository.addRole(addedDoctor.getUserId(), role.getRoleId());
+
             return new ResponseEntity<String>("Doctor registered succesfully", HttpStatus.OK);
         }
 
