@@ -3,6 +3,7 @@ package com.medirec.medirec.Services;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Document;
 import com.medirec.medirec.Models.MedicalHistory;
 import com.medirec.medirec.Repositories.DocumentRepository;
@@ -46,12 +47,24 @@ public class DocumentServiceImpl implements DocumentService{
         }
     }
     
-    
     public ResponseEntity<String> deleteDocuments(ArrayList<Integer> documentIds){
         
         documentRepository.deleteAllById(documentIds);
 
         return new ResponseEntity<String>("Documents deleted succesfully", HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> getDocuments(int medicalHistoryId){
+
+        MedicalHistory medicalHistory = medicalHistoryRepository.findById(medicalHistoryId).get();
+
+        Response response = new Response(
+            HttpStatus.OK.toString(),
+            "Documents retreived succesfully",
+            medicalHistory.getDocuments()
+        );
+
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 
 }

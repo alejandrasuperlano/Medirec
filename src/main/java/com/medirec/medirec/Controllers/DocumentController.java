@@ -1,5 +1,6 @@
 package com.medirec.medirec.Controllers;
 
+import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.MedicalHistory;
 import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Services.DocumentServiceImpl;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +47,22 @@ public class DocumentController {
         int medicalHistoryId = patient.getPatientMedicalHistory().getMedicalHistoryId();
 
         return documentService.saveDocument(files, medicalHistoryId);
+    }
+
+    @GetMapping
+    public ResponseEntity<Response> getDocuments(
+        @RequestParam("patientId") int patientId
+    ){
+        Patient patient = patientService.getPatientById(patientId);
+        if(patient == null){
+            Response response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient with such id", null);
+
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        int medicalHistoryId = patient.getPatientMedicalHistory().getMedicalHistoryId();
+
+        return documentService.getDocuments(medicalHistoryId);
     }
 
 }
