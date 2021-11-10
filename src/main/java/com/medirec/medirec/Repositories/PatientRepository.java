@@ -17,6 +17,7 @@ public interface PatientRepository extends CrudRepository<Patient, Integer> {
 
     Optional<Patient> findPatientByUserEmail (String email);
     Optional<Patient> findByUserEmail(String email);
+    Optional<Patient> findByUserDoc(String doc);
     
     @Modifying
     @Query(

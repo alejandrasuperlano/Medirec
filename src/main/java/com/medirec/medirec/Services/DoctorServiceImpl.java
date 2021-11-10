@@ -45,8 +45,15 @@ public class DoctorServiceImpl implements DoctorService {
     public ResponseEntity<String> registerDoctor(Doctor doctor){
 
         boolean emailExists = doctorRepository.findByUserEmail(doctor.getUserEmail()).isPresent();
+        boolean docExists = doctorRepository.findByUserDoc(doctor.getUserDoc()).isPresent();
+        boolean professionalCardExists = doctorRepository.findByDoctorProfessionalCard(doctor.getDoctorProfessionalCard()).isPresent();
+
         if(emailExists){
             return new ResponseEntity<String>("Email already taken", HttpStatus.BAD_REQUEST);
+        }else if(docExists){
+            return new ResponseEntity<String>("Doctor with such document is already registered", HttpStatus.BAD_REQUEST);
+        }else if(professionalCardExists){
+            return new ResponseEntity<String>("Doctor with such professional card is already registered", HttpStatus.BAD_REQUEST);
         }else{
             String encodedPassword = encoder.encode(doctor.getUserPassword());
             doctor.setUserPassword(encodedPassword);

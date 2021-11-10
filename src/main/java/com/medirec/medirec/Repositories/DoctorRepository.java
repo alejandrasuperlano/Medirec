@@ -18,6 +18,9 @@ public interface DoctorRepository extends CrudRepository <Doctor, Integer>{
 
     Optional<Doctor> findDoctorByUserEmail (String email);
     Optional<Doctor> findByUserEmail(String email);
+    Optional<Doctor> findByUserDoc(String doc);
+    Optional<Doctor> findByDoctorProfessionalCard(String card);
+
     
     @Query(
         value = "SELECT * FROM doctor WHERE doctor.user_first_name LIKE ?1 OR doctor.user_last_name LIKE ?1",

@@ -1,5 +1,6 @@
 package com.medirec.medirec.Services;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,8 +34,12 @@ public class PatientServiceImpl implements PatientService {
     public ResponseEntity<String> registerPatient(Patient patient){
 
         boolean emailExists = patientRepository.findByUserEmail(patient.getUserEmail()).isPresent();
+        boolean docExists = patientRepository.findByUserDoc(patient.getUserDoc()).isPresent();
+
         if(emailExists){
             return new ResponseEntity<String>("Email already taken", HttpStatus.BAD_REQUEST);
+        }else if(docExists){
+            return new ResponseEntity<String>("Patient with such document is already registered", HttpStatus.BAD_REQUEST);
         }else{
             String encodedPassword = encoder.encode(patient.getUserPassword());
             patient.setUserPassword(encodedPassword);

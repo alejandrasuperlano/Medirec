@@ -7,7 +7,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
-@Table(name = "USER", uniqueConstraints = @UniqueConstraint(columnNames = "userEmail"))
+@Table(
+    name = "USER",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "userEmail"),
+        @UniqueConstraint(columnNames = "userDoc"),
+    }
+)
 @Data
 public class User {
     @Id
