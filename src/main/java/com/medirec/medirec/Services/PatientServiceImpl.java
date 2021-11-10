@@ -87,4 +87,16 @@ public class PatientServiceImpl implements PatientService {
             return null;
         }
     }
+
+    public Patient getPatientById(int id) {
+        Optional<Patient> patient = patientRepository.findById(id);
+
+        if(patient.isPresent()){
+            return patient.get();
+        } else {
+            return null;
+        }
+    }
+
+
 }

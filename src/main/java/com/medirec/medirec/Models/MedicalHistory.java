@@ -16,9 +16,6 @@ public class MedicalHistory {
         strategy = GenerationType.IDENTITY
     )
     private int medicalHistoryId;
-
-    
-    
     
     // -----------RELATIONSHIPS -------------//
     @OneToOne(mappedBy = "patientMedicalHistory")
@@ -44,5 +41,8 @@ public class MedicalHistory {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicalHistory")
     @Column(name = "illnesses")
     private List<Illness> illnesses;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicalHistory")
+    private List<Document> documents;
     
 }

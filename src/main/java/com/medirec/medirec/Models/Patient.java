@@ -90,5 +90,4 @@ public class Patient extends User{
         )
     )
     private List<Role> roles;
-
 }
