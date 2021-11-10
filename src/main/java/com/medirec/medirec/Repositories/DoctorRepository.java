@@ -8,6 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +18,18 @@ public interface DoctorRepository extends CrudRepository <Doctor, Integer>{
 
     Optional<Doctor> findDoctorByUserEmail (String email);
     Optional<Doctor> findByUserEmail(String email);
+    
+    @Query(
+        value = "SELECT * FROM doctor WHERE doctor.user_first_name LIKE ?1 OR doctor.user_last_name LIKE ?1",
+        nativeQuery = true
+    )
+    List<Doctor> searchByFirstNameAndLastName(String name);
+
+    @Query(
+        value = "SELECT * FROM doctor WHERE doctor.doctor_specialization LIKE ?1",
+        nativeQuery = true
+    )
+    List<Doctor> searchBySpecialization(String specialization);
 
     @Modifying
     @Query(

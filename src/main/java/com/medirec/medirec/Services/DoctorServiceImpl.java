@@ -1,6 +1,7 @@
 package com.medirec.medirec.Services;
 
 import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
+import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Models.Role;
 import com.medirec.medirec.Repositories.DoctorRepository;
@@ -91,4 +92,39 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<String>("Doctor complete registration succesfully", HttpStatus.OK);
         }
     }
+
+    public ResponseEntity<Response> searchByName(String name){
+
+        name = "%" + name + "%";
+
+        List<Doctor> results = doctorRepository.searchByFirstNameAndLastName(name);
+        
+        String message = results.isEmpty() ? "No doctors found" : "Search done correctly";
+        
+        Response response = new Response(
+            HttpStatus.OK.toString(),
+            message,
+            results
+        );
+
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> searchBySpecialization(String specialization){
+
+        specialization = "%" + specialization + "%";
+
+        List<Doctor> results = doctorRepository.searchBySpecialization(specialization);
+        
+        String message = results.isEmpty() ? "No doctors found" : "Search done correctly";
+        
+        Response response = new Response(
+            HttpStatus.OK.toString(),
+            message,
+            results
+        );
+
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
 }

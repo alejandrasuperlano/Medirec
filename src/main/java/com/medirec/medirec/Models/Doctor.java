@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "DOCTOR", uniqueConstraints = @UniqueConstraint(columnNames = "doctorProfessionalCard"))
 @Getter
@@ -73,6 +75,7 @@ public class Doctor extends User{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
     @Column(name = "doctorPatients")
+    @JsonIgnore
     private List<Access> doctorPatients;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -86,6 +89,7 @@ public class Doctor extends User{
             name = "roleId"
         )
     )
+    @JsonIgnore
     private List<Role> roles;
 
 }
