@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,18 +40,18 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
-    public ResponseEntity<String> registerDoctor(Doctor doctor){
+    public void registerDoctor(Doctor doctor) throws IllegalStateException{
 
         boolean emailExists = doctorRepository.findByUserEmail(doctor.getUserEmail()).isPresent();
         boolean docExists = doctorRepository.findByUserDoc(doctor.getUserDoc()).isPresent();
         boolean professionalCardExists = doctorRepository.findByDoctorProfessionalCard(doctor.getDoctorProfessionalCard()).isPresent();
 
         if(emailExists){
-            return new ResponseEntity<String>("Email already taken", HttpStatus.BAD_REQUEST);
+            throw new IllegalStateException("Email already taken");
         }else if(docExists){
-            return new ResponseEntity<String>("Doctor with such document is already registered", HttpStatus.BAD_REQUEST);
+            throw new IllegalStateException("Doctor with such document is already registered");
         }else if(professionalCardExists){
-            return new ResponseEntity<String>("Doctor with such professional card is already registered", HttpStatus.BAD_REQUEST);
+            throw new IllegalStateException("Doctor with such professional card is already registered");
         }else{
             String encodedPassword = encoder.encode(doctor.getUserPassword());
             doctor.setUserPassword(encodedPassword);
@@ -66,17 +64,16 @@ public class DoctorServiceImpl implements DoctorService {
             
             doctorRepository.addRole(addedDoctor.getUserId(), role.getRoleId());
 
-            return new ResponseEntity<String>("Doctor registered succesfully", HttpStatus.OK);
         }
 
     }
 
-    public ResponseEntity<String> completeRegistration(DoctorCompleteRegistrationDto doctorDto) {
+    public void completeRegistration(DoctorCompleteRegistrationDto doctorDto) throws IllegalStateException{
 
         Optional<Doctor> result = doctorRepository.findById(doctorDto.getId());
 
         if (!result.isPresent()) {
-            return new ResponseEntity<String>("No doctor with given id", HttpStatus.BAD_REQUEST);
+            throw new IllegalStateException("No doctor with such id");
         } else {
             Doctor doctor = result.get();
             
@@ -84,7 +81,7 @@ public class DoctorServiceImpl implements DoctorService {
             try {
                 birthDayDate = new SimpleDateFormat("dd/MM/yyyy").parse(doctorDto.getBirthDay());
             } catch (ParseException e) {
-                return new ResponseEntity<String>("Error parsing birthday date", HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new IllegalStateException("Error parsing birthday date");
             }
             
             doctor.setUserAddress(doctorDto.getAddress());
@@ -96,7 +93,6 @@ public class DoctorServiceImpl implements DoctorService {
             
             doctorRepository.save(doctor);
 
-            return new ResponseEntity<String>("Doctor complete registration succesfully", HttpStatus.OK);
         }
     }
 

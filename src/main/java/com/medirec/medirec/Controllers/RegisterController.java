@@ -9,6 +9,7 @@ import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Services.DoctorServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,13 @@ public class RegisterController {
             Patient::setPatientEps);
         }).map(patientDto);
 
-        return patientService.registerPatient(patient);
+        try {
+            patientService.registerPatient(patient);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<String>("Patient registered succesfully", HttpStatus.OK);
     }
     
     @PostMapping(path = "doctor")
@@ -72,16 +79,42 @@ public class RegisterController {
             Doctor::setDoctorProfessionalCard);
         }).map(doctorDto);
         
-        return doctorService.registerDoctor(doctor);
+        try {
+            doctorService.registerDoctor(doctor);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("Doctor registred succesfully", HttpStatus.OK);
     }
 
     @PostMapping(path = "patient/complete")
     public ResponseEntity<String> completePatientRegistration(@RequestBody PatientCompleteRegistrationDto patientDto){
-        return patientService.completeRegistration(patientDto);
+        
+        try {
+            patientService.completeRegistration(patientDto);
+        } catch (IllegalStateException e) {
+            if(e.getMessage() == "No patient with such id"){
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }else if(e.getMessage() == "Error parsing birthday date"){
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return new ResponseEntity<String>("Patient complete registration succesfully", HttpStatus.OK);
     }
     
     @PostMapping(path = "doctor/complete")
     public ResponseEntity<String> completePatientRegistration(@RequestBody DoctorCompleteRegistrationDto doctorDto){
-        return doctorService.completeRegistration(doctorDto);
+        try {
+            doctorService.completeRegistration(doctorDto);
+            
+        } catch (IllegalStateException e) {
+            if(e.getMessage() == "No doctor with such id"){
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }else if(e.getMessage() == "Error parsing birthday date"){
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        return new ResponseEntity<String>("Doctor complete registration succesfully", HttpStatus.OK);
     }
 }
