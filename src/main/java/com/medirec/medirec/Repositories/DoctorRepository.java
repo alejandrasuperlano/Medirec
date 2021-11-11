@@ -20,6 +20,7 @@ public interface DoctorRepository extends CrudRepository <Doctor, Integer>{
     Optional<Doctor> findByUserEmail(String email);
     Optional<Doctor> findByUserDoc(String doc);
     Optional<Doctor> findByDoctorProfessionalCard(String card);
+    Doctor getDoctorByPasswordResetTokenDoctor(String token);
 
     
     @Query(

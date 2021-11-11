@@ -25,4 +25,6 @@ public interface PatientRepository extends CrudRepository<Patient, Integer> {
         nativeQuery = true
     )
     public void addRole(@Param("userId") int userId, @Param("roleId") long roleId);
+
+    Patient getPatientByPasswordResetTokenPatient(String token);
 }

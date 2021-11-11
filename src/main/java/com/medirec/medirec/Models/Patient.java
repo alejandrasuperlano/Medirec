@@ -1,5 +1,6 @@
 package com.medirec.medirec.Models;
 
+import com.medirec.medirec.Security.Model.PasswordResetTokenPatient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -90,4 +91,7 @@ public class Patient extends User{
         )
     )
     private List<Role> roles;
+
+    @OneToOne(mappedBy = "patient")
+    private PasswordResetTokenPatient passwordResetTokenPatient;
 }
