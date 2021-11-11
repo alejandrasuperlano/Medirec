@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "PATIENT")
 @Getter
@@ -58,6 +60,7 @@ public class Patient extends User{
     /*@Transient
         private int role;*/
     // ------------------------------- RELATIONSHIPS ------------------------------- //
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medicalHistoryId", referencedColumnName = "medicalHistoryId")
     private MedicalHistory patientMedicalHistory;
@@ -79,6 +82,7 @@ public class Patient extends User{
     @Column(name = "patientDoctors")
     private List<Access> patientDoctors;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = @JoinColumn(

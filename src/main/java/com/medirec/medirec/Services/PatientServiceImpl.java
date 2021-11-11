@@ -85,21 +85,21 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient getPatientByEmail(String email) {
+    public Patient getPatientByEmail(String email) throws IllegalStateException{
         if(patientRepository.findPatientByUserEmail(email).isPresent()){
             return patientRepository.findPatientByUserEmail(email).get();
         } else {
-            return null;
+            throw new IllegalStateException();
         }
     }
 
-    public Patient getPatientById(int id) {
+    public Patient getPatientById(int id) throws IllegalStateException {
         Optional<Patient> patient = patientRepository.findById(id);
 
         if(patient.isPresent()){
             return patient.get();
         } else {
-            return null;
+            throw new IllegalStateException();
         }
     }
 

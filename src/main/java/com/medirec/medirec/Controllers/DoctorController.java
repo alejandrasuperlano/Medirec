@@ -2,9 +2,6 @@ package com.medirec.medirec.Controllers;
 
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Services.DoctorServiceImpl;
-import com.medirec.medirec.Services.Interfaces.DoctorService;
-import com.medirec.medirec.Services.Interfaces.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
