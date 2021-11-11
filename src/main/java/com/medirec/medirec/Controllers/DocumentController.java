@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/patientDocuments")
+@RequestMapping("/patient/documents")
 public class DocumentController {
     
     @Autowired 
@@ -34,9 +34,9 @@ public class DocumentController {
     @Autowired
     MedicalHistoryServiceImpl medicalHistoryService;
 
-    @PostMapping
+    @PostMapping(path = "{patientId}")
     public ResponseEntity<String> uploadDocuments(
-        @RequestParam("patientId") int patientId,
+        @PathVariable("patientId") int patientId,
         @RequestParam("files") MultipartFile[] files
     ){
         Patient patient = patientService.getPatientById(patientId);
@@ -49,9 +49,9 @@ public class DocumentController {
         return documentService.saveDocument(files, medicalHistoryId);
     }
 
-    @GetMapping
+    @GetMapping(path = "{patientId}")
     public ResponseEntity<Response> getDocuments(
-        @RequestParam("patientId") int patientId
+        @PathVariable("patientId") int patientId
     ){
         Patient patient = patientService.getPatientById(patientId);
         if(patient == null){
