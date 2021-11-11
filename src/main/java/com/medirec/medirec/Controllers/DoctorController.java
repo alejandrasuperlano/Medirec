@@ -1,6 +1,9 @@
 package com.medirec.medirec.Controllers;
 
+import java.util.List;
+
 import com.medirec.medirec.Dto.Response;
+import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Services.DoctorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +27,15 @@ public class DoctorController {
         @RequestParam(required = false) String specialization
     ){  
         Response response;
+        List<Doctor> results;
 
         if(name != null && specialization == null){
 
-            return doctorService.searchByName(name);
+            results = doctorService.searchByName(name);
 
         }else if(specialization != null && name == null){
 
-            return doctorService.searchBySpecialization(specialization);
+            results = doctorService.searchBySpecialization(specialization);
 
         }else if(name == null && specialization == null){
 
@@ -52,5 +56,14 @@ public class DoctorController {
             return new ResponseEntity<Response>(response, HttpStatus.OK);
         }
 
+        String message = results.isEmpty() ? "No doctors found" : "Search done correctly";
+        
+        response = new Response(
+            HttpStatus.OK.toString(),
+            message,
+            results
+        );
+
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 }

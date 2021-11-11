@@ -1,18 +1,16 @@
 package com.medirec.medirec.Controllers;
 
+import java.io.IOException;
+
 import com.medirec.medirec.Dto.Response;
-import com.medirec.medirec.Models.MedicalHistory;
 import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Services.DocumentServiceImpl;
 import com.medirec.medirec.Services.MedicalHistoryServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
-import com.medirec.medirec.Services.Interfaces.DocumentService;
-import com.medirec.medirec.Services.Interfaces.PatientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,26 +36,38 @@ public class DocumentController {
     public ResponseEntity<String> uploadDocuments(
         @PathVariable("patientId") int patientId,
         @RequestParam("files") MultipartFile[] files
-    ){
-        Patient patient = patientService.getPatientById(patientId);
-        if(patient == null){
-            return new ResponseEntity<String>("No patient with such id", HttpStatus.BAD_REQUEST);
+    ){  
+        Patient patient;
+
+        try {
+            patient = patientService.getPatientById(patientId);        
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<String>("No patient with such id", HttpStatus.BAD_REQUEST);   
         }
-
+        
         int medicalHistoryId = patient.getPatientMedicalHistory().getMedicalHistoryId();
-
-        return documentService.saveDocument(files, medicalHistoryId);
+        
+        try {
+            documentService.saveDocument(files, medicalHistoryId);
+        } catch (IOException e) {
+            return new ResponseEntity<String>("Error saving files", HttpStatus.INTERNAL_SERVER_ERROR);   
+        }
+        
+        return new ResponseEntity<String>("Documents saved succesfully", HttpStatus.OK);   
     }
-
+    
     @GetMapping(path = "{patientId}")
     public ResponseEntity<Response> getDocuments(
         @PathVariable("patientId") int patientId
-    ){
-        Patient patient = patientService.getPatientById(patientId);
-        if(patient == null){
-            Response response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient with such id", null);
+        ){
+            Patient patient;
+            Response response;
 
-            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            try {
+                patient = patientService.getPatientById(patientId);
+            } catch (Exception e) {
+                response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient with such id", null);
+                return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
 
         int medicalHistoryId = patient.getPatientMedicalHistory().getMedicalHistoryId();

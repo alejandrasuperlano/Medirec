@@ -1,15 +1,12 @@
 package com.medirec.medirec.Services;
 
 import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
-import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Models.Role;
 import com.medirec.medirec.Repositories.DoctorRepository;
 import com.medirec.medirec.Repositories.RoleRepository;
 import com.medirec.medirec.Services.Interfaces.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -96,38 +93,22 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
-    public ResponseEntity<Response> searchByName(String name){
+    public List<Doctor> searchByName(String name){
 
         name = "%" + name + "%";
 
         List<Doctor> results = doctorRepository.searchByFirstNameAndLastName(name);
         
-        String message = results.isEmpty() ? "No doctors found" : "Search done correctly";
-        
-        Response response = new Response(
-            HttpStatus.OK.toString(),
-            message,
-            results
-        );
-
-        return new ResponseEntity<Response>(response, HttpStatus.OK);
+        return results;
     }
 
-    public ResponseEntity<Response> searchBySpecialization(String specialization){
+    public List<Doctor> searchBySpecialization(String specialization){
 
         specialization = "%" + specialization + "%";
 
         List<Doctor> results = doctorRepository.searchBySpecialization(specialization);
-        
-        String message = results.isEmpty() ? "No doctors found" : "Search done correctly";
-        
-        Response response = new Response(
-            HttpStatus.OK.toString(),
-            message,
-            results
-        );
 
-        return new ResponseEntity<Response>(response, HttpStatus.OK);
+        return results;
     }
 
 }

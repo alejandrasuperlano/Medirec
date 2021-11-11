@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -26,10 +25,9 @@ public class DocumentServiceImpl implements DocumentService{
     @Autowired
     private MedicalHistoryRepository medicalHistoryRepository;
 
-    public ResponseEntity<String> saveDocument(MultipartFile[] files, int medicalHistoryId){
+    public void saveDocument(MultipartFile[] files, int medicalHistoryId) throws IOException{
         MedicalHistory medicalHistory = medicalHistoryRepository.findById(medicalHistoryId).get();
         
-        try {
             for (MultipartFile file : files) {    
                 String documentName = file.getOriginalFilename();
                             
@@ -39,12 +37,7 @@ public class DocumentServiceImpl implements DocumentService{
                 
                 documentRepository.save(document);
             }
-            
-            return new ResponseEntity<String>("Documents saved succesfully", HttpStatus.OK);
-            
-        } catch (IOException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+
     }
     
     public ResponseEntity<String> deleteDocuments(ArrayList<Integer> documentIds){

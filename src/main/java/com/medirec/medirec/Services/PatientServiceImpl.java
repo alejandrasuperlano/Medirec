@@ -84,7 +84,7 @@ public class PatientServiceImpl implements PatientService {
         if(patientRepository.findPatientByUserEmail(email).isPresent()){
             return patientRepository.findPatientByUserEmail(email).get();
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("No patient with such email");
         }
     }
 
@@ -94,7 +94,7 @@ public class PatientServiceImpl implements PatientService {
         if(patient.isPresent()){
             return patient.get();
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("No patient with such email");
         }
     }
 
