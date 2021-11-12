@@ -4,7 +4,10 @@ import com.medirec.medirec.Dto.DoctorCompleteRegistrationDto;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Models.Role;
 import com.medirec.medirec.Repositories.DoctorRepository;
+import com.medirec.medirec.Repositories.PasswordTokenDoctorRepository;
+import com.medirec.medirec.Repositories.PasswordTokenPatientRepository;
 import com.medirec.medirec.Repositories.RoleRepository;
+import com.medirec.medirec.Security.Model.PasswordResetTokenDoctor;
 import com.medirec.medirec.Services.Interfaces.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -28,6 +32,12 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     BCryptPasswordEncoder encoder;
 
+    @Autowired
+    PasswordTokenPatientRepository passwordTokenPatientRepository;
+
+    @Autowired
+    PasswordTokenDoctorRepository passwordTokenRepoDoctor;
+
     @Override
     public Doctor getDoctorByEmail(String email) {
         if (doctorRepository.findDoctorByUserEmail(email).isPresent()) {
@@ -37,6 +47,18 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
+    @Override
+    public boolean passwordConfirm(String password, String passwordConfirmed) {
+        return passwordConfirmed.equals(password);
+    }
+
+    @Override
+    public void passwordRecovery(Doctor doctorDB, String newPassword) {
+        String encodedPassword = encoder.encode(newPassword);
+        doctorDB.setUserPassword(encodedPassword);
+        doctorRepository.save(doctorDB);
+    }
+    
     public void registerDoctor(Doctor doctor) throws IllegalStateException{
 
         boolean emailExists = doctorRepository.findByUserEmail(doctor.getUserEmail()).isPresent();
@@ -109,6 +131,28 @@ public class DoctorServiceImpl implements DoctorService {
         List<Doctor> results = doctorRepository.searchBySpecialization(specialization);
 
         return results;
+    }
+    @Override
+    public void createPasswordResetTokenForUser(Doctor doctor, String token) {
+        PasswordResetTokenDoctor myToken = new PasswordResetTokenDoctor(token, doctor);
+        passwordTokenRepoDoctor.save(myToken);
+    }
+
+    public String validatePasswordResetToken(String token) {
+        final PasswordResetTokenDoctor passToken = passwordTokenRepoDoctor.findByToken(token);
+
+        return !isTokenFound(passToken) ? "invalidToken"
+                : isTokenExpired(passToken) ? "expired"
+                : null;
+    }
+
+    private boolean isTokenFound(PasswordResetTokenDoctor passToken) {
+        return passToken != null;
+    }
+
+    private boolean isTokenExpired(PasswordResetTokenDoctor passToken) {
+        final Calendar cal = Calendar.getInstance();
+        return passToken.getExpiryDate().before(cal.getTime());
     }
 
 }

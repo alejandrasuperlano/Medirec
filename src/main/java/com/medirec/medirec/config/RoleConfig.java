@@ -1,5 +1,6 @@
 package com.medirec.medirec.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.medirec.medirec.Models.Role;
@@ -17,7 +18,10 @@ public class RoleConfig {
         return args ->{
             Role patientRole = new Role("PATIENT");
             Role doctorRole = new Role("DOCTOR");
-            repository.saveAll(List.of(patientRole,doctorRole));
+            ArrayList<Role> roleArrayList = new ArrayList<>();
+            roleArrayList.add(patientRole);
+            roleArrayList.add(doctorRole);
+            repository.saveAll(roleArrayList);
         };
     }
 }

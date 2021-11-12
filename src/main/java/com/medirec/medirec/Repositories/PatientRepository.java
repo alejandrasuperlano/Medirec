@@ -25,4 +25,27 @@ public interface PatientRepository extends CrudRepository<Patient, Integer> {
         nativeQuery = true
     )
     public void addRole(@Param("userId") int userId, @Param("roleId") long roleId);
+
+    @Query(
+            value = "select pt.user_id, \n" +
+                    "       pt.user_address, \n" +
+                    "       pt.user_birth_day, \n" +
+                    "       pt.user_doc_type, \n" +
+                    "       pt.user_email, \n" +
+                    "       pt.user_first_name, \n" +
+                    "       pt.user_gender, \n" +
+                    "       pt.user_last_name, \n" +
+                    "       pt.user_password, \n" +
+                    "       pt.user_tutorial, \n" +
+                    "       pt.patient_eps, \n" +
+                    "       pt.patient_marital_status, \n" +
+                    "       pt.medical_history_id, \n" +
+                    "       pt.user_doc\n" +
+                    "from patient as pt inner join password_reset_token_patient as reset on pt.user_id = reset.patient_recover_id \n" +
+                    "where reset.patient_recover_id = :patientId and \n" +
+                    "reset.token = :token",
+            nativeQuery = true
+    )
+    Patient findPatientByTokenAndId(@Param("patientId") int patientId,
+                                    @Param("token") String token);
 }

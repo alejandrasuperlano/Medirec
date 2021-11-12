@@ -1,5 +1,6 @@
 package com.medirec.medirec.Models;
 
+import com.medirec.medirec.Security.Model.PasswordResetTokenDoctor;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -91,5 +92,8 @@ public class Doctor extends User{
     )
     @JsonIgnore
     private List<Role> roles;
+
+    @OneToOne(mappedBy = "doctor")
+    private PasswordResetTokenDoctor passwordResetTokenDoctor;
 
 }
