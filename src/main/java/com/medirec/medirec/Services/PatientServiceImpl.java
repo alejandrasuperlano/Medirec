@@ -113,9 +113,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void passwordRecovery(Patient patientDB) {
-        String encodedPassword = encoder.encode(patientDB.getUserPassword());
+    public void passwordRecovery(Patient patientDB, String newPassword) {
+        String encodedPassword = encoder.encode(newPassword);
         patientDB.setUserPassword(encodedPassword);
+        patientRepository.save(patientDB);
     }
 
     @Override

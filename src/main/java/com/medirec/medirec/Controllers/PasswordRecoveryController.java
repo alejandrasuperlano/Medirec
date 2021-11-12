@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -111,17 +112,17 @@ public class PasswordRecoveryController {
     }
 
     @PostMapping("/patient/savePassword")
-    public ResponseEntity savePassword(@Valid @RequestBody PasswordRecoveryDto passwordDto) {
+    public ResponseEntity savePasswordPatient(@Valid @RequestBody PasswordRecoveryDto passwordDto) {
         String result = patientService.validatePasswordResetToken(passwordDto.getToken());
 
         if(result != null) {
             return new ResponseEntity(new Response("BAD", "No se ha encontrado al usuario",
                     null), HttpStatus.BAD_REQUEST);
         }
-
-        Patient patient = patientRepository.getPatientByPasswordResetTokenPatient(passwordDto.getToken());
+        int patientId = patientRepository.findPatientByUserEmail(passwordDto.getEmail()).get().getUserId();
+        Patient patient = patientRepository.findPatientByTokenAndId(patientId, passwordDto.getToken());
         if(patient != null && patientService.passwordConfirm(passwordDto.getPassword(), passwordDto.getConfirmPassword())) {
-            patientService.passwordRecovery(patient);
+            patientService.passwordRecovery(patient, passwordDto.getPassword());
             return new ResponseEntity(new Response("OK", "La contraseña ha sido cambiada con " +
                     "éxito", null), HttpStatus.ACCEPTED);
         } else {
@@ -138,10 +139,10 @@ public class PasswordRecoveryController {
             return new ResponseEntity(new Response("BAD", "No se ha encontrado al usuario",
                     null), HttpStatus.BAD_REQUEST);
         }
-
-        Doctor doctor = doctorRepository.getDoctorByPasswordResetTokenDoctor(passwordDto.getToken());
+        int doctorId = doctorRepository.findDoctorByUserEmail(passwordDto.getEmail()).get().getUserId();
+        Doctor doctor = doctorRepository.findDoctorByTokenAndId(doctorId, passwordDto.getToken());
         if(doctor != null && doctorService.passwordConfirm(passwordDto.getPassword(), passwordDto.getConfirmPassword())) {
-            doctorService.passwordRecovery(doctor);
+            doctorService.passwordRecovery(doctor, passwordDto.getPassword());
             return new ResponseEntity(new Response("OK", "La contraseña ha sido cambiada con " +
                     "éxito", null), HttpStatus.ACCEPTED);
         } else {

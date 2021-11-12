@@ -3,6 +3,7 @@ package com.medirec.medirec.Dto;
 public class PasswordRecoveryDto {
 
     private String token;
+    private String email;
     private String password;
     private String confirmPassword;
 
@@ -16,6 +17,14 @@ public class PasswordRecoveryDto {
 
     public String getConfirmPassword() {
         return confirmPassword;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setConfirmPassword(String confirmPassword) {

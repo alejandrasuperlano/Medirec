@@ -53,9 +53,10 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void passwordRecovery(Doctor doctorDB) {
-        String encodedPassword = encoder.encode(doctorDB.getUserPassword());
+    public void passwordRecovery(Doctor doctorDB, String newPassword) {
+        String encodedPassword = encoder.encode(newPassword);
         doctorDB.setUserPassword(encodedPassword);
+        doctorRepository.save(doctorDB);
     }
 
     public ResponseEntity<String> registerDoctor(Doctor doctor){

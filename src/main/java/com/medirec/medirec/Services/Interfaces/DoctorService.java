@@ -7,7 +7,7 @@ public interface DoctorService {
 
     Doctor getDoctorByEmail (String email);
     boolean passwordConfirm(String password, String passwordConfirmed);
-    void passwordRecovery (Doctor doctorDB);
+    void passwordRecovery (Doctor doctorDB, String newPassword);
     public void createPasswordResetTokenForUser(Doctor doctor, String token);
     public String validatePasswordResetToken(String token);
 }

@@ -6,7 +6,7 @@ public interface PatientService {
 
     Patient getPatientByEmail(String email);
     boolean passwordConfirm(String password, String confirmPass);
-    void passwordRecovery(Patient patient);
+    void passwordRecovery(Patient patient, String newPassword);
     public void createPasswordResetTokenForUser(Patient patient, String token);
     public String validatePasswordResetToken(String token);
 }

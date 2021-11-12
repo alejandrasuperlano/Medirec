@@ -20,8 +20,31 @@ public interface DoctorRepository extends CrudRepository <Doctor, Integer>{
     Optional<Doctor> findByUserEmail(String email);
     Optional<Doctor> findByUserDoc(String doc);
     Optional<Doctor> findByDoctorProfessionalCard(String card);
-    Doctor getDoctorByPasswordResetTokenDoctor(String token);
-
+    @Query(
+            value = "select dr.user_id, \n" +
+                    "       dr.user_address, \n" +
+                    "       dr.user_birth_day, \n" +
+                    "       dr.user_doc_type, \n" +
+                    "       dr.user_email, \n" +
+                    "       dr.user_first_name, \n" +
+                    "       dr.user_gender, \n" +
+                    "       dr.user_last_name, \n" +
+                    "       dr.user_password, \n" +
+                    "       dr.user_tutorial, \n" +
+                    "       dr.doctor_consultory, \n" +
+                    "       dr.doctor_experience, \n" +
+                    "       dr.doctor_experience, \n" +
+                    "       dr.doctor_professional_card, \n" +
+                    "       dr.doctor_specialization, \n" +
+                    "       dr.doctor_university, \n" +
+                    "       dr.user_doc\n" +
+                    "from doctor as dr inner join password_reset_token_doctor as reset on dr.user_id = reset.doctor_recover_id \n" +
+                    "where reset.doctor_recover_id = :doctorId and \n" +
+                    "reset.token = :token",
+            nativeQuery = true
+    )
+    Doctor findDoctorByTokenAndId(@Param("doctorId") int doctorId,
+                                  @Param("token") String token);
     
     @Query(
         value = "SELECT * FROM doctor WHERE doctor.user_first_name LIKE ?1 OR doctor.user_last_name LIKE ?1",
