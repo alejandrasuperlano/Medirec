@@ -10,6 +10,7 @@ import com.medirec.medirec.Services.PatientServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/patient/documents")
+@Api(tags = "Patient documents", description = "CRUD operations for patient's documents")
 public class DocumentController {
     
     @Autowired 
@@ -32,7 +37,8 @@ public class DocumentController {
     @Autowired
     MedicalHistoryServiceImpl medicalHistoryService;
 
-    @PostMapping(path = "{patientId}")
+    @PostMapping(path = "{patientId}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ApiOperation(value = "Upload patient's documents")
     public ResponseEntity<String> uploadDocuments(
         @PathVariable("patientId") int patientId,
         @RequestParam("files") MultipartFile[] files
@@ -56,7 +62,8 @@ public class DocumentController {
         return new ResponseEntity<String>("Documents saved succesfully", HttpStatus.OK);   
     }
     
-    @GetMapping(path = "{patientId}")
+    @GetMapping(path = "{patientId}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "Fetch patient's documents")
     public ResponseEntity<Response> getDocuments(
         @PathVariable("patientId") int patientId
         ){

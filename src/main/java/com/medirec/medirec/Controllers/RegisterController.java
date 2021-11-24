@@ -10,6 +10,7 @@ import com.medirec.medirec.Services.DoctorServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +36,7 @@ public class RegisterController {
     @Autowired
     ModelMapper modelMapper;
 
-    @PostMapping(path = "patient")
+    @PostMapping(path = "patient", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "Partial patient registration")
     public ResponseEntity<String> registerPatient(@RequestBody PatientRegistrationDto patientDto){
         Patient patient = modelMapper.typeMap(PatientRegistrationDto.class, Patient.class).addMappings(mapper ->{
@@ -64,7 +65,7 @@ public class RegisterController {
         return new ResponseEntity<String>("Patient registered succesfully", HttpStatus.OK);
     }
     
-    @PostMapping(path = "doctor")
+    @PostMapping(path = "doctor", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "Partial doctor registration")
     public ResponseEntity<String> registerDoctor(@RequestBody DoctorRegistrationDto doctorDto){
         Doctor doctor = modelMapper.typeMap(DoctorRegistrationDto.class, Doctor.class).addMappings(mapper ->{
@@ -94,7 +95,7 @@ public class RegisterController {
         return new ResponseEntity<String>("Doctor registred succesfully", HttpStatus.OK);
     }
 
-    @PostMapping(path = "patient/complete")
+    @PostMapping(path = "patient/complete", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "Complete patient registration")
     public ResponseEntity<String> completePatientRegistration(@RequestBody PatientCompleteRegistrationDto patientDto){
         
@@ -111,7 +112,7 @@ public class RegisterController {
         return new ResponseEntity<String>("Patient complete registration succesfully", HttpStatus.OK);
     }
     
-    @PostMapping(path = "doctor/complete")
+    @PostMapping(path = "doctor/complete", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "Complete patient registration")
     public ResponseEntity<String> completePatientRegistration(@RequestBody DoctorCompleteRegistrationDto doctorDto){
         try {
