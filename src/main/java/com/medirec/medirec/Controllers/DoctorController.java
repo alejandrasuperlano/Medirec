@@ -27,7 +27,7 @@ public class DoctorController {
     DoctorServiceImpl doctorService;
 
     @GetMapping(path = "search", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Search doctoros by name or specialization")
+    @ApiOperation(value = "Search doctors by name or specialization")
     public ResponseEntity<Response> searchDoctor(
         @RequestParam(required = false) String name,
         @RequestParam(required = false) String specialization
