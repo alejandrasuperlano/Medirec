@@ -1,9 +1,18 @@
 package com.medirec.medirec.Dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "A custom response model")
 public class Response {
 
+    @ApiModelProperty(notes = "HTTP status of the response")
     private String status;
+    
+    @ApiModelProperty(notes = "An optional message in case of need")
     private String message;
+
+    @ApiModelProperty(notes = "The data produced by the server")
     private Object data;
 
     public Response(String status, String message, Object data) {

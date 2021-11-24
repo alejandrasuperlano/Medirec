@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import org.modelmapper.ModelMapper;
 
 @RestController
 @RequestMapping("/register")
+@Api(tags = "User registration", description = "Both partial and complete user registration")
 public class RegisterController {
 
     @Autowired
@@ -34,6 +36,7 @@ public class RegisterController {
     ModelMapper modelMapper;
 
     @PostMapping(path = "patient")
+    @ApiOperation(value = "Partial patient registration")
     public ResponseEntity<String> registerPatient(@RequestBody PatientRegistrationDto patientDto){
         Patient patient = modelMapper.typeMap(PatientRegistrationDto.class, Patient.class).addMappings(mapper ->{
             mapper.map(src -> src.getFirstName(),
@@ -62,6 +65,7 @@ public class RegisterController {
     }
     
     @PostMapping(path = "doctor")
+    @ApiOperation(value = "Partial doctor registration")
     public ResponseEntity<String> registerDoctor(@RequestBody DoctorRegistrationDto doctorDto){
         Doctor doctor = modelMapper.typeMap(DoctorRegistrationDto.class, Doctor.class).addMappings(mapper ->{
             mapper.map(src -> src.getFirstName(),
@@ -91,6 +95,7 @@ public class RegisterController {
     }
 
     @PostMapping(path = "patient/complete")
+    @ApiOperation(value = "Complete patient registration")
     public ResponseEntity<String> completePatientRegistration(@RequestBody PatientCompleteRegistrationDto patientDto){
         
         try {
@@ -107,6 +112,7 @@ public class RegisterController {
     }
     
     @PostMapping(path = "doctor/complete")
+    @ApiOperation(value = "Complete patient registration")
     public ResponseEntity<String> completePatientRegistration(@RequestBody DoctorCompleteRegistrationDto doctorDto){
         try {
             doctorService.completeRegistration(doctorDto);
