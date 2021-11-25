@@ -48,12 +48,23 @@ public class LoginController {
                 String jwt = jwtProvider.tokenGenerator(auth);
                 UserDetails userDetails = (UserDetails) auth.getPrincipal();
                 JwtDto jwtDto;
-                if (patientRepository.findPatientByUserEmail(loginDto.getEmail()).get() != null){
-                    jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
-                    return new ResponseEntity<JwtDto>(jwtDto, HttpStatus.OK);
-                } else if (doctorRepository.findDoctorByUserEmail(loginDto.getEmail()).get() != null){
-                    jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
-                    return new ResponseEntity<JwtDto>(jwtDto, HttpStatus.OK);
+                String role = loginDto.getRole();
+                if (role.equals("PATIENT")){
+                    if (patientRepository.findPatientByUserEmail(loginDto.getEmail()).get() != null){
+                        jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+                        return new ResponseEntity<JwtDto>(jwtDto, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity(new Response("BAD", "El usuario no se ha registrado " +
+                                "en la aplicacion", null), HttpStatus.BAD_REQUEST);
+                    }
+                } else if (role.equals("DOCTOR")){
+                    if (doctorRepository.findDoctorByUserEmail(loginDto.getEmail()).get() != null){
+                        jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+                        return new ResponseEntity<JwtDto>(jwtDto, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity(new Response("BAD", "El usuario no se ha registrado " +
+                                "en la aplicacion", null), HttpStatus.BAD_REQUEST);
+                    }
                 }
             } catch (Exception e){
                 return new ResponseEntity(new Response("BAD", "Hay un problema con: " +
