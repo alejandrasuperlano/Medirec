@@ -19,6 +19,11 @@ public class PersonalRecord {
     @Column(name = "prDescription")
     private String prDescription;
 
+    public PersonalRecord(Date date, String prDescription) {
+        this.date = date;
+        this.prDescription = prDescription;
+    }
+
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "medicalHistoryId")

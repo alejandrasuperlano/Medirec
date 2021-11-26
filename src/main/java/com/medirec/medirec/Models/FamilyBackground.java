@@ -33,6 +33,10 @@ public class FamilyBackground {
     @NotBlank
     private String description;
 
+    public FamilyBackground(String familyMember, String description) {
+        this.familyMember = familyMember;
+        this.description = description;
+    }
 
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(

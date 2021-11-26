@@ -32,6 +32,13 @@ public class Allergy {
     @NotBlank
     private String type;
 
+
+    public Allergy(String allergen, String type) {
+        this.allergen = allergen;
+        this.type = type;
+    }
+
+
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(
         cascade = CascadeType.ALL,
