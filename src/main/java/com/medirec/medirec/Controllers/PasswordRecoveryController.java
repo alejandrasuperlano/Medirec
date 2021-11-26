@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/password/recovery")
 public class PasswordRecoveryController {
