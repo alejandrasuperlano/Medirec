@@ -16,7 +16,7 @@ public class IllnessDto {
     private String illnessName;
     
     @ApiModelProperty(notes = "Detection date in format DD/MM/YYYY", example = "01/10/2010")
-    private Date detectionDate;
+    private String detectionDate;
     
     @ApiModelProperty(notes = "Description of the illness")
     private String illnessDescription;

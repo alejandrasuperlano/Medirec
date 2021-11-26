@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
+import com.medirec.medirec.Dto.AllergyDto;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -38,6 +40,10 @@ public class Allergy {
         this.type = type;
     }
 
+    public Allergy(AllergyDto dto){
+        this.allergen = dto.getAllergen();
+        this.type = dto.getType();
+    }
 
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(

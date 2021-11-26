@@ -3,10 +3,20 @@ package com.medirec.medirec.Models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.medirec.medirec.Dto.IllnessDto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
 @Table(name = "ILLNESS")
+@Getter
+@Setter
 public class Illness {
 
     @Id
@@ -26,6 +36,18 @@ public class Illness {
         this.illnessName = illnessName;
         this.detectionDate = detectionDate;
         this.illnessDescription = illnessDescription;
+    }
+
+    public Illness(IllnessDto dto) throws IllegalStateException{
+        this.illnessName = dto.getIllnessName();
+        this.illnessDescription = dto.getIllnessDescription();
+        Date detectionDate;
+        try{
+            detectionDate = new SimpleDateFormat("dd/MM/yyyy").parse(dto.getDetectionDate());  
+        }catch (ParseException e){
+            throw new IllegalStateException("Error parsing detection date");
+        }
+        this.detectionDate = detectionDate;
     }
 
     // ------------------------------- RELATIONSHIPS ------------------------------- //

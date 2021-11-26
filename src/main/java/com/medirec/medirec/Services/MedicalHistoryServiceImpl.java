@@ -18,4 +18,8 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService{
     public Optional<MedicalHistory> getMedicalHistoryById(int id){
         return repository.findById(id);
     }
+
+    public void saveMedicalHistory(MedicalHistory medicalHistory){
+        repository.save(medicalHistory);
+    }
 }

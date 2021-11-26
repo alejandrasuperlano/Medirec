@@ -43,6 +43,5 @@ public class MedicalHistory {
     private List<Illness> illnesses;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicalHistory")
-    private List<Document> documents;
-    
+    private List<Document> documents;    
 }
