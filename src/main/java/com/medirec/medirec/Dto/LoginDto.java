@@ -11,6 +11,9 @@ public class LoginDto {
     
     @ApiModelProperty(notes = "User's password")
     private String password;
+    
+    @ApiModelProperty(notes = "User's role")
+    private String role;
 
     public String getEmail() {
         return email;
@@ -26,5 +29,13 @@ public class LoginDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

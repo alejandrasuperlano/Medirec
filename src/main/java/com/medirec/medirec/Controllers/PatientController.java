@@ -37,14 +37,15 @@ public class PatientController {
         
         Response response;
 
-        try {
-            Patient patient = patientService.getPatientById(id);
+        Patient patient = patientService.getPatientById(id);
+        if(patient != null){
             response = new Response(HttpStatus.OK.toString(), null, patient);
-        } catch (IllegalStateException e) {
-            response = new Response(HttpStatus.BAD_REQUEST.toString(), e.getMessage(), null);
+        }else{
+            
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient with such id", null);
             return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
-
+        
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 
