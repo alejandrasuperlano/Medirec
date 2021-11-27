@@ -12,7 +12,7 @@ public class LoginDto {
     @ApiModelProperty(notes = "User's password")
     private String password;
     
-    @ApiModelProperty(notes = "User's role")
+    @ApiModelProperty(notes = "User's role, must be PATIENT or DOCTOR")
     private String role;
 
     public String getEmail() {
