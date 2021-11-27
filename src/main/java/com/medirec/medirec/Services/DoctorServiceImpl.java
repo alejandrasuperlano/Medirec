@@ -47,6 +47,14 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
+    public Doctor getDoctorById(int id) {
+        if (doctorRepository.findById(id).isPresent()) {
+            return doctorRepository.findById(id).get();
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public boolean passwordConfirm(String password, String passwordConfirmed) {
         return passwordConfirmed.equals(password);

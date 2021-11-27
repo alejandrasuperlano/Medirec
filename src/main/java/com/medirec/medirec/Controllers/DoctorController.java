@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,6 +73,23 @@ public class DoctorController {
             results
         );
 
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = {"{doctorId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Fetch doctor information by doctor id")
+    public ResponseEntity<Response> getDoctorById(@PathVariable("doctorId") int id){
+        
+        Response response;
+
+        Doctor doctor = doctorService.getDoctorById(id);
+        if(doctor != null){
+            response = new Response(HttpStatus.OK.toString(), null, doctor);
+        }else{
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No doctor with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+        
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 }
