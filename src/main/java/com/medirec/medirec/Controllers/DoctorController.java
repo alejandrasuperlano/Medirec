@@ -2,6 +2,7 @@ package com.medirec.medirec.Controllers;
 
 import java.util.List;
 
+import com.medirec.medirec.Dto.DoctorUpdateInfoDto;
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Security.JWT.JwtProvider;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -118,5 +121,31 @@ public class DoctorController {
         }
         
         return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    @PutMapping(path = {"{doctorId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update doctor's information")
+    public ResponseEntity<String> updateDoctor(
+        @PathVariable("doctorId") int id,
+        @RequestBody DoctorUpdateInfoDto dto,
+        @RequestParam("sessionToken") String sessionToken
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            return new ResponseEntity<String>("Invalid session token", HttpStatus.BAD_REQUEST);
+        }
+
+        Doctor doctor = doctorService.getDoctorById(id);
+        if(doctor == null){
+            return new ResponseEntity<String>("No doctor with such id", HttpStatus.BAD_REQUEST);
+        }
+        
+        doctor.setDoctorExperience(dto.getExperience());
+        doctor.setUserGender(dto.getGender());
+        doctor.setUserAddress(dto.getHomeAddress());
+        doctor.setDoctorConsultory(dto.getConsultory());
+        
+        doctorService.saveDoctor(doctor);
+
+        return new ResponseEntity<String>("Doctor's info updated successfully", HttpStatus.OK);
     }
 }

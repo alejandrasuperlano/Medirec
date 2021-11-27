@@ -55,6 +55,10 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
+    public void saveDoctor(Doctor doctor){
+        doctorRepository.save(doctor);
+    }
+
     @Override
     public boolean passwordConfirm(String password, String passwordConfirmed) {
         return passwordConfirmed.equals(password);
