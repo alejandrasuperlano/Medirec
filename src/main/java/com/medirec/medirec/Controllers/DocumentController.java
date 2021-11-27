@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Patient;
+import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.DocumentServiceImpl;
 import com.medirec.medirec.Services.MedicalHistoryServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
@@ -39,12 +40,19 @@ public class DocumentController {
     @Autowired
     MedicalHistoryServiceImpl medicalHistoryService;
 
+    @Autowired
+    JwtProvider jwtProvider;
+
     @PostMapping(path = "{patientId}", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "Upload patient's documents")
     public ResponseEntity<String> uploadDocuments(
         @PathVariable("patientId") int patientId,
-        @RequestParam("files") MultipartFile[] files
+        @RequestParam("files") MultipartFile[] files,
+        @RequestParam("sessionToken") String sessionToken
     ){  
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            return new ResponseEntity<String>("Invalid session token", HttpStatus.BAD_REQUEST);
+        }
         Patient patient;
 
         try {
@@ -67,16 +75,27 @@ public class DocumentController {
     @GetMapping(path = "{patientId}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "Fetch patient's documents")
     public ResponseEntity<Response> getDocuments(
-        @PathVariable("patientId") int patientId
-        ){
-            Patient patient;
-            Response response;
+        @PathVariable("patientId") int patientId,
+        @RequestParam("sessionToken") String sessionToken
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
+        
+        Patient patient;
+        Response response;
 
-            try {
-                patient = patientService.getPatientById(patientId);
-            } catch (Exception e) {
-                response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient with such id", null);
-                return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        try {
+            patient = patientService.getPatientById(patientId);
+        } catch (Exception e) {
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
 
         int medicalHistoryId = patient.getPatientMedicalHistory().getMedicalHistoryId();

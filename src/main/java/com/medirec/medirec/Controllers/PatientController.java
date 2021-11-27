@@ -2,6 +2,7 @@ package com.medirec.medirec.Controllers;
 
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Patient;
+import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.PatientServiceImpl;
 import com.medirec.medirec.Services.Interfaces.UserService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -33,9 +35,24 @@ public class PatientController {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    JwtProvider jwtProvider;
+
     @GetMapping(path = {"{patientId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Fetch patient information by patient id")
-    public ResponseEntity<Response> getPatientById(@PathVariable("patientId") int id){
+    public ResponseEntity<Response> getPatientById(
+        @PathVariable("patientId") int id,
+        @RequestParam("sessionToken") String sessionToken
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
         
         Response response;
 

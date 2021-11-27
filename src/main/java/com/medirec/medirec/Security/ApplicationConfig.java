@@ -68,7 +68,7 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register/**", "/login**", "/patientDocuments/**", "/doctor/**", "/patient/**", "/password/recovery/**").permitAll()
+                .antMatchers("/register/**", "/login**", "/doctor/**", "/patient/**", "/password/recovery/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Doctor;
+import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.DoctorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,16 +26,30 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "Doctor", description = "CRUD and other operations for doctors")
 public class DoctorController {
 
-
     @Autowired
     DoctorServiceImpl doctorService;
+
+    @Autowired
+    JwtProvider jwtProvider;
 
     @GetMapping(path = "search", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Search doctors by name or specialization")
     public ResponseEntity<Response> searchDoctor(
         @RequestParam(required = false) String name,
-        @RequestParam(required = false) String specialization
+        @RequestParam(required = false) String specialization,
+        @RequestParam("sessionToken") String sessionToken
     ){  
+        
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
+        
         Response response;
         List<Doctor> results;
 
@@ -78,7 +93,19 @@ public class DoctorController {
 
     @GetMapping(path = {"{doctorId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Fetch doctor information by doctor id")
-    public ResponseEntity<Response> getDoctorById(@PathVariable("doctorId") int id){
+    public ResponseEntity<Response> getDoctorById(
+        @PathVariable("doctorId") int id,
+        @RequestParam("sessionToken") String sessionToken
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
         
         Response response;
 

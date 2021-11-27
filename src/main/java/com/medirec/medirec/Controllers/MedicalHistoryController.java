@@ -15,6 +15,7 @@ import com.medirec.medirec.Models.Illness;
 import com.medirec.medirec.Models.MedicalHistory;
 import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Models.PersonalRecord;
+import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.AllergyServiceImpl;
 import com.medirec.medirec.Services.FamilyBackgroundServiceImpl;
 import com.medirec.medirec.Services.IllnessServiceImpl;
@@ -66,12 +67,20 @@ public class MedicalHistoryController {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    JwtProvider jwtProvider;
+
     @PostMapping(path = "{patientId}", produces = MediaType.TEXT_PLAIN_VALUE)
     @ApiOperation(value = "Patient's medical history creation")
     public ResponseEntity<String> creation(
         @PathVariable("patientId") int patientId,
-        @RequestBody MedicalhistoryCreationDto medicalHistoryDto
+        @RequestBody MedicalhistoryCreationDto medicalHistoryDto,
+        @RequestParam("sessionToken") String sessionToken
     ){  
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            return new ResponseEntity<String>("Invalid session token", HttpStatus.BAD_REQUEST);
+        }
+
         Patient patient = patientService.getPatientById(patientId);
         if(patient == null){
             return new ResponseEntity<String>("No patient with such id", HttpStatus.BAD_REQUEST);
