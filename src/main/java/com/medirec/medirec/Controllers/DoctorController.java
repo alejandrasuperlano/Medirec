@@ -148,6 +148,7 @@ public class DoctorController {
         return new ResponseEntity<String>("Doctor's info updated successfully", HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Make a request for accessing to a patient profile")
     @PostMapping("/prof={doctorId}/makeRequest")
     public ResponseEntity requestingProfile(@PathVariable("doctorId") int doctorId,
                                             @RequestBody ProfileRequestDto access,

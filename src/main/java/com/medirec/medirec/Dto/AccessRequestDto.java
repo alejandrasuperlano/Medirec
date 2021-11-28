@@ -2,7 +2,7 @@ package com.medirec.medirec.Dto;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel("DTO model for accessing to a Patient profile")
+@ApiModel("DTO model for accept or reject Patient profile")
 public class AccessRequestDto {
     private int doctorId;
     private int patientId;

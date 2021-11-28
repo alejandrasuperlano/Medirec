@@ -74,6 +74,7 @@ public class PatientController {
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Show a list of doctors that are requesting for accessing to a patient profile")
     @PostMapping ("/prof={patientId}/management-requests")
     public ResponseEntity requestManagement(@PathVariable("patientId") int patientId){
         try{
@@ -92,6 +93,7 @@ public class PatientController {
         }
     }
 
+    @ApiOperation(value = "Accept a request made by a doctor")
     @PostMapping("/acceptRequest")
     public ResponseEntity acceptRequest (@RequestBody AccessRequestDto access){
         try{
@@ -104,6 +106,7 @@ public class PatientController {
         }
     }
 
+    @ApiOperation(value = "Reject a request made by a doctor")
     @PostMapping("/rejectRequest")
     public ResponseEntity rejectRequest (@RequestBody AccessRequestDto access){
         try{
@@ -115,7 +118,7 @@ public class PatientController {
                     null), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @ApiOperation(value = "Show a list of doctors that are treating a patient and were accepted by the patient")
     @GetMapping ("/prof={patientId}/mydoctors")
     public ResponseEntity myDoctors (@PathVariable("patientId") int patientId){
         try{

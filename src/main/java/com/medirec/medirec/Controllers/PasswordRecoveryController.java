@@ -11,6 +11,8 @@ import com.medirec.medirec.Repositories.PatientRepository;
 import com.medirec.medirec.Security.Service.SecurityService;
 import com.medirec.medirec.Services.Interfaces.DoctorService;
 import com.medirec.medirec.Services.Interfaces.PatientService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/password/recovery")
+@Api(tags = "Password Recovery", description = "Password Recover by sending an email")
 public class PasswordRecoveryController {
     @Autowired
     DoctorRepository doctorRepository;
@@ -51,6 +54,7 @@ public class PasswordRecoveryController {
     private Environment env;
 
     @PostMapping("/patient/resetPassword")
+    @ApiOperation(value = "Generate a temporary token and email with the link for recover the user password")
     public ResponseEntity patientResetPassword(@RequestBody EmailForRecoveryDto email, HttpServletRequest request) {
         Patient patient = null;
         try{
@@ -69,6 +73,7 @@ public class PasswordRecoveryController {
     }
 
     @PostMapping("/doctor/resetPassword")
+    @ApiOperation(value = "Generate a temporary token and email with the link for recover the user password")
     public ResponseEntity doctorResetPassword(@RequestBody EmailForRecoveryDto email, HttpServletRequest request) {
         Doctor doctor = null;
         try{
@@ -86,6 +91,7 @@ public class PasswordRecoveryController {
                 null), HttpStatus.ACCEPTED);
     }
 
+    @ApiOperation(value = "Page that show the fields for changing the password")
     @GetMapping(value = "/patient/changePassword", params = "token")
     public String patientShowChangePasswordPage(Locale locale, Model model,
                                          @RequestParam("token") String token) {
@@ -99,6 +105,7 @@ public class PasswordRecoveryController {
         }
     }
 
+    @ApiOperation(value = "Page that show the fields for changing the password")
     @GetMapping(value = "/doctor/changePassword", params = "token")
     public String doctorShowChangePasswordPage(Locale locale, Model model,
                                                 @RequestParam("token") String token) {
@@ -112,6 +119,7 @@ public class PasswordRecoveryController {
         }
     }
 
+    @ApiOperation(value = "Search and reset the patient password in the database")
     @PostMapping("/patient/savePassword")
     public ResponseEntity savePasswordPatient(@Valid @RequestBody PasswordRecoveryDto passwordDto) {
         String result = patientService.validatePasswordResetToken(passwordDto.getToken());
@@ -132,6 +140,7 @@ public class PasswordRecoveryController {
         }
     }
 
+    @ApiOperation(value = "Search and reset the doctor password in the database")
     @PostMapping("/doctor/savePassword")
     public ResponseEntity savePasswordDoctor(@Valid @RequestBody PasswordRecoveryDto passwordDto) {
         String result = doctorService.validatePasswordResetToken(passwordDto.getToken());

@@ -48,7 +48,7 @@ public class LoginController {
     PatientRepository patientRepository;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "User login")
+    @ApiOperation(value = "User login and authentication")
     public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginDto loginDto, BindingResult result){
         if(!result.hasErrors()){
             try {
