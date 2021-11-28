@@ -25,4 +25,11 @@ public class Access {
     @JoinColumn(name = "doctor")
     private Doctor doctor;
 
+    public AccessPK getId() {
+        return id;
+    }
+
+    public void setId(AccessPK id) {
+        this.id = id;
+    }
 }
