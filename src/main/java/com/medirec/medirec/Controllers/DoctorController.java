@@ -3,22 +3,18 @@ package com.medirec.medirec.Controllers;
 import java.util.List;
 
 import com.medirec.medirec.Dto.DoctorUpdateInfoDto;
+import com.medirec.medirec.Dto.ProfileRequestDto;
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.DoctorServiceImpl;
+import com.medirec.medirec.Services.Interfaces.AccessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +30,9 @@ public class DoctorController {
 
     @Autowired
     JwtProvider jwtProvider;
+
+    @Autowired
+    AccessService accessService;
 
     @GetMapping(path = "search", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Search doctors by name or specialization")
@@ -147,5 +146,24 @@ public class DoctorController {
         doctorService.saveDoctor(doctor);
 
         return new ResponseEntity<String>("Doctor's info updated successfully", HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Make a request for accessing to a patient profile")
+    @PostMapping("/prof={doctorId}/makeRequest")
+    public ResponseEntity requestingProfile(@PathVariable("doctorId") int doctorId,
+                                            @RequestBody ProfileRequestDto access,
+                                            BindingResult result){
+        if (!result.hasErrors()){
+            try{
+                accessService.saveRequest(doctorId, access.getPatientId());
+                return new ResponseEntity(new Response("OK", "Se ha realizado la solicitud con éxito",
+                        null), HttpStatus.ACCEPTED);
+            } catch (Exception e){
+                return new ResponseEntity(new Response("BAD", "No se ha podido realizar la solicitud",
+                        null), HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity(new Response("BAD", "Hay campos en blanco",
+                null), HttpStatus.BAD_REQUEST);
     }
 }

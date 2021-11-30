@@ -1,5 +1,8 @@
 package com.medirec.medirec.Dto;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel(description = "Model for recovery user password")
 public class PasswordRecoveryDto {
 
     private String token;
