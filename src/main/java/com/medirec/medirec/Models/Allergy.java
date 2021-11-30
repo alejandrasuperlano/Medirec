@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medirec.medirec.Dto.AllergyDto;
 
 import lombok.Data;
@@ -53,6 +54,7 @@ public class Allergy {
     @JoinColumn(
         name = "medicalHistoryId"
     )
+    @JsonIgnore
     private MedicalHistory medicalHistory;
 
 }

@@ -9,6 +9,7 @@ import com.medirec.medirec.Dto.FamilyBackgroundDto;
 import com.medirec.medirec.Dto.IllnessDto;
 import com.medirec.medirec.Dto.MedicalhistoryCreationDto;
 import com.medirec.medirec.Dto.PersonalRecordDto;
+import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Allergy;
 import com.medirec.medirec.Models.FamilyBackground;
 import com.medirec.medirec.Models.Illness;
@@ -136,6 +137,46 @@ public class MedicalHistoryController {
         familyBackgroundService.saveBackgrounds(backgrounds);
         
         return new ResponseEntity<String>("Medical history created succesfully", HttpStatus.OK);
+    }
+
+    @GetMapping(path = "{patientId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Fetch patient's medical history")
+    public ResponseEntity<Response> getMedicalHistory(
+        @PathVariable("patientId") int patientId,
+        @RequestParam("sessionToken") String sessionToken
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
+        
+        MedicalHistory medicalHistory;
+        Response response;
+        
+        try {
+            medicalHistory = medicalHistoryService.getMedicalHistory(patientId);
+        } catch (IllegalStateException e){
+            response = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                e.getMessage(),
+                null
+            );
+            
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+        
+        response = new Response(
+            HttpStatus.OK.toString(),
+            null,
+            medicalHistory
+            );
+            
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
     
 }

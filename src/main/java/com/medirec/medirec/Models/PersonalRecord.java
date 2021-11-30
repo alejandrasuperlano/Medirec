@@ -1,12 +1,13 @@
 package com.medirec.medirec.Models;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medirec.medirec.Dto.PersonalRecordDto;
 
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Table(name = "PERSONALRECORD")
 @Getter
 @Setter
+@NoArgsConstructor
 public class PersonalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +48,7 @@ public class PersonalRecord {
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "medicalHistoryId")
+    @JsonIgnore
     private MedicalHistory medicalHistory;
 
 }

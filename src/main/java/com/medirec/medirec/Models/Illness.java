@@ -4,9 +4,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medirec.medirec.Dto.IllnessDto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.text.ParseException;
@@ -17,6 +19,7 @@ import java.util.Date;
 @Table(name = "ILLNESS")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Illness {
 
     @Id
@@ -53,5 +56,6 @@ public class Illness {
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "medicalHistoryId")
+    @JsonIgnore
     private MedicalHistory medicalHistory;
 }
