@@ -1,8 +1,10 @@
 package com.medirec.medirec.Controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.medirec.medirec.Dto.Response;
+import com.medirec.medirec.Models.Document;
 import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.DocumentServiceImpl;
@@ -72,12 +74,13 @@ public class DocumentController {
         return new ResponseEntity<String>("Documents saved succesfully", HttpStatus.OK);   
     }
     
-    @GetMapping(path = "{patientId}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "Fetch patient's documents")
+    @GetMapping(path = "{patientId}")
+    @ApiOperation(value = "Fetch patient's documents", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> getDocuments(
         @PathVariable("patientId") int patientId,
         @RequestParam("sessionToken") String sessionToken
     ){
+
         if(!jwtProvider.tokenValidation(sessionToken)){
             Response tokenResponse = new Response(
                 HttpStatus.BAD_REQUEST.toString(),
@@ -99,8 +102,15 @@ public class DocumentController {
         }
 
         int medicalHistoryId = patient.getPatientMedicalHistory().getMedicalHistoryId();
+        List<Document> documents = documentService.getDocuments(medicalHistoryId);
 
-        return documentService.getDocuments(medicalHistoryId);
+        response = new Response(
+            HttpStatus.OK.toString(),
+            "Documents retreived succesfully",
+            documents
+        );
+
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 
 }
