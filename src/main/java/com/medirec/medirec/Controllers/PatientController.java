@@ -2,6 +2,7 @@ package com.medirec.medirec.Controllers;
 
 import com.medirec.medirec.Dto.AccessRequestDto;
 import com.medirec.medirec.Dto.DoctorsListDto;
+import com.medirec.medirec.Dto.PatientUpdateInfoDto;
 import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.Models.Access;
 import com.medirec.medirec.Models.Doctor;
@@ -72,6 +73,32 @@ public class PatientController {
         }
         
         return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Update patient's information")
+    @PutMapping(path = {"{patientId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updatePatient(
+        @PathVariable("patientId") int id,
+        @RequestBody PatientUpdateInfoDto dto,
+        @RequestParam("sessionToken") String sessionToken
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            return new ResponseEntity<String>("Invalid session token", HttpStatus.BAD_REQUEST);
+        }
+
+        Patient patient = patientService.getPatientById(id);
+        if(patient == null){
+            return new ResponseEntity<String>("No patient with such id", HttpStatus.BAD_REQUEST);
+        }
+        
+        patient.setUserGender(dto.getGender());
+        patient.setUserAddress(dto.getHomeAddress());
+        patient.setPatientEps(dto.getEps());
+        patient.setPatientMaritalStatus(dto.getMaritalStatus());
+        
+        patientService.savePatient(patient);
+
+        return new ResponseEntity<String>("Patient's info updated successfully", HttpStatus.OK);
     }
 
     @ApiOperation(value = "Show a list of doctors that are requesting for accessing to a patient profile")

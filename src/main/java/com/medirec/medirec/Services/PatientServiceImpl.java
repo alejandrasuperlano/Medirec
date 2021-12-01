@@ -104,6 +104,10 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    public void savePatient(Patient patient){
+        patientRepository.save(patient);
+    }
+
     @Override
     public boolean passwordConfirm(String password, String confirmPass) {
         return confirmPass.equals(password);
