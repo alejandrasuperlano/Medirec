@@ -21,7 +21,7 @@ public interface PatientRepository extends CrudRepository<Patient, Integer> {
     
     @Modifying
     @Query(
-        value = "INSERT INTO user_roles VALUES (:userId,:roleId,NULL);",
+        value = "INSERT INTO user_roles VALUES (NULL,:roleId,:userId);",
         nativeQuery = true
     )
     public void addRole(@Param("userId") int userId, @Param("roleId") long roleId);
