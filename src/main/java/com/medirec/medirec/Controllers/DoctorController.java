@@ -74,12 +74,12 @@ public class DoctorController {
             return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }else{
             response = new Response(
-                HttpStatus.OK.toString(),
-                "Search using both",
+                HttpStatus.BAD_REQUEST.toString(),
+                "Can't search using both parameters",
                 null
             );
 
-            return new ResponseEntity<Response>(response, HttpStatus.OK);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
 
         String message = results.isEmpty() ? "No doctors found" : "Search done correctly";

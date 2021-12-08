@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @CrossOrigin
 @RestController
@@ -163,4 +164,73 @@ public class PatientController {
         }
     }
 
+    @GetMapping(path = "search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Search patients by name or document id")
+    public ResponseEntity<Response> searchPatients(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String doc,
+        @RequestParam("sessionToken") String sessionToken
+    ){  
+        
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
+        
+        Response response;
+        List<Patient> results = new ArrayList<>();
+
+        if(name != null && doc == null){
+
+            results = patientService.searchByName(name);
+
+        }else if(doc != null && name == null){
+            Patient patient;
+            try {
+                patient = patientService.searchByDoc(doc).get();
+            } catch (NoSuchElementException e) {
+                response = new Response(
+                    HttpStatus.BAD_REQUEST.toString(),
+                    "No patient found",
+                    null
+                );
+    
+                return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            }
+            results.add(patient);
+
+        }else if(name == null && doc == null){
+
+            response = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Either name or doc parameters are required",
+                null
+            );
+
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }else{
+            response = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Can't search using both parameters",
+                null
+            );
+
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        String message = results.isEmpty() ? "No doctors found" : "Search done correctly";
+        
+        response = new Response(
+            HttpStatus.OK.toString(),
+            message,
+            results
+        );
+
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
 }
