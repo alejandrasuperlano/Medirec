@@ -1,7 +1,7 @@
 package com.medirec.medirec.Security.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medirec.medirec.Models.Doctor;
-import com.medirec.medirec.Models.Patient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +22,7 @@ public class PasswordResetTokenDoctor {
     private String token;
 
     @OneToOne(targetEntity = Doctor.class, fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(nullable = false, name = "doctorRecoverId")
     private Doctor doctor;
 
