@@ -1,9 +1,11 @@
 package com.medirec.medirec.Services;
 
 import com.medirec.medirec.Dto.DoctorsListDto;
+import com.medirec.medirec.Dto.PatientsListDto;
 import com.medirec.medirec.Models.Access;
 import com.medirec.medirec.Models.AccessPK;
 import com.medirec.medirec.Models.Doctor;
+import com.medirec.medirec.Models.Patient;
 import com.medirec.medirec.Repositories.AccessRepository;
 import com.medirec.medirec.Repositories.DoctorRepository;
 import com.medirec.medirec.Repositories.PatientRepository;
@@ -74,6 +76,34 @@ public class AccessServiceImpl implements AccessService {
                 myDoctors.add(doctorDto);
             }
             return myDoctors;
+        } catch (Exception e){
+            throw new Exception("No se ha encontrado al usuario");
+        }
+
+    }
+
+    @Override
+    public List<PatientsListDto> getMyPatients(int doctorId) throws Exception{
+        try{
+            List<Access> requesters = accessRepository.getMyPatientsByDoctorId(doctorId);
+
+            if (requesters == null){
+                return null;
+            }
+
+            List<PatientsListDto> myPatients = new ArrayList<>();
+            for (Access element : requesters){
+                Patient patient = patientRepository.findById(element.getPatient().getUserId()).get();
+                PatientsListDto patientDto = new PatientsListDto();
+                patientDto.setFirstName(patient.getUserFirstName());
+                patientDto.setLastName(patient.getUserLastName());
+                patientDto.setGender(patient.getUserGender());
+                patientDto.setDoc(patient.getUserDoc());
+                patientDto.setId(patient.getUserId()); // Este campo debe estar oculto en frontend
+                myPatients.add(patientDto);
+            }
+            return myPatients;
+
         } catch (Exception e){
             throw new Exception("No se ha encontrado al usuario");
         }

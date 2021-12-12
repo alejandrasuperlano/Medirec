@@ -29,6 +29,11 @@ public interface AccessRepository extends CrudRepository<Access, AccessPK> {
     List<Access> getMyDoctorsByPatientId (@Param("idPatient") int idPatient);
 
     @Query(value =  "select * " +
+            "from access " +
+            "where access.permission = 1 and access.doctor = :idDoctor", nativeQuery = true)
+    List<Access> getMyPatientsByDoctorId (@Param("idDoctor") int idDoctor);
+
+    @Query(value =  "select * " +
                     "from access " +
                     "where access.patient = :patientId and access.doctor = :doctorId " +
                             "and access.permission = 0", nativeQuery = true)

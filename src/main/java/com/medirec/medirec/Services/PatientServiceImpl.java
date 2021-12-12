@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import com.medirec.medirec.Dto.PatientCompleteRegistrationDto;
@@ -102,6 +103,19 @@ public class PatientServiceImpl implements PatientService {
         } else {
             return null;
         }
+    }
+
+    public List<Patient> searchByName(String name){
+        name = "%" + name + "%";
+        
+        List<Patient> results = patientRepository.searchByFirstNameAndLastName(name);
+        return results;
+    }
+    
+    public Optional<Patient> searchByDoc(String doc){
+
+        Optional<Patient> result = patientRepository.findByUserDoc(doc);
+        return result;
     }
 
     public void savePatient(Patient patient){
