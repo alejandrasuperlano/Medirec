@@ -2,9 +2,7 @@ package com.medirec.medirec.Controllers;
 
 import java.util.List;
 
-import com.medirec.medirec.Dto.DoctorUpdateInfoDto;
-import com.medirec.medirec.Dto.ProfileRequestDto;
-import com.medirec.medirec.Dto.Response;
+import com.medirec.medirec.Dto.*;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.DoctorServiceImpl;
@@ -165,5 +163,23 @@ public class DoctorController {
         }
         return new ResponseEntity(new Response("BAD", "Hay campos en blanco",
                 null), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value = "Show a list of patients that are being treated by a doctor")
+    @GetMapping ("/prof={doctorId}/mypatients")
+    public ResponseEntity myPatients (@PathVariable("doctorId") int doctorId){
+        try{
+            List<PatientsListDto> myPatients = accessService.getMyPatients(doctorId);
+            if (myPatients != null && myPatients.size() > 0){
+                int numOfDoctors = myPatients.size();
+                return new ResponseEntity(new Response("OK", "Tus pacientes son: ", myPatients), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity(new Response("BAD", "No tienes ningun paciente en atención",
+                        null), HttpStatus.ACCEPTED);
+            }
+        } catch (Exception e){
+            return new ResponseEntity(new Response("BAD", e.getMessage(),
+                    null), HttpStatus.BAD_REQUEST);
+        }
     }
 }
