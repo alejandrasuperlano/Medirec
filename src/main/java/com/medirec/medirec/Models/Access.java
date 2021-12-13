@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "ACCESS")
 @Data
@@ -19,9 +21,11 @@ public class Access {
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "patient")
+    @JsonIgnore
     private Patient patient;
-
+    
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "doctor")
     private Doctor doctor;
 
