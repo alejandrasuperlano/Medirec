@@ -164,8 +164,9 @@ public class PasswordRecoveryController {
     /* --------------------------- EMAIL FOR PATIENTS --------------------------- */
     private SimpleMailMessage constructResetTokenEmail(
             String contextPath, Locale locale, String token, Patient patient) {
-        String url = "http://localhost:8080/password/recovery/patient/changePassword?token=" + token;
-        return constructEmail("Reset Password", "hola" + " \r\n" + url, patient);
+        String url = "http://localhost:8080/recuperacion-contrasena/paciente?token=" + token;
+        return constructEmail("Reset Password", "Hola! Accede a este link para" +
+                "poder recuperar tu contraseña" + " \r\n" + url, patient);
     }
 
     private SimpleMailMessage constructEmail(String subject, String body,
@@ -181,8 +182,9 @@ public class PasswordRecoveryController {
     /* --------------------------- EMAIL FOR DOCTORS --------------------------- */
     private SimpleMailMessage constructResetTokenEmail(
             String contextPath, Locale locale, String token, Doctor doctor) {
-        String url = "http://localhost:8080/password/recovery/patient/changePassword?token=" + token;
-        return constructEmail("Reset Password", "hola" + " \r\n" + url, doctor);
+        String url = "http://localhost:8080/recuperacion-contrasena/doctor?token=" + token;
+        return constructEmail("Reset Password", "Hola! Accede a este link para " +
+                "poder recuperar tu contraseña" + " \r\n" + url, doctor);
     }
 
     private SimpleMailMessage constructEmail(String subject, String body,
