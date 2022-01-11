@@ -4,6 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.medirec.medirec.Dto.ScoreDto;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +36,11 @@ public class Score {
         this.doctor = doctor;
     }
 
+    public Score(ScoreDto dto){
+        this.score = dto.getScore();
+        this.opinion = dto.getOpinion();
+    }
+
     
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -40,14 +48,15 @@ public class Score {
         name = "patientId",
         referencedColumnName = "userId"
         )
-        private Patient patient;
-        
-
+    @JsonIgnore
+    private Patient patient;
+    
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
         name = "doctorId",
         referencedColumnName = "userId"
-    )
+        )
+    @JsonIgnore
     private Doctor doctor;
 
 
