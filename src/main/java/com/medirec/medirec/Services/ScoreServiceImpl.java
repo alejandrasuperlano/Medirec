@@ -22,10 +22,10 @@ public class ScoreServiceImpl implements ScoreService{
     public Score getScoreById(int id){
         Optional<Score> score = repository.findById(id);
         
-        if(score.get() == null){
-            return null;
-        }else{
+        if(score.isPresent()){
             return score.get();
+        }else{
+            return null;
         }
     }
 }

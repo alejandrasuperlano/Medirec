@@ -61,9 +61,19 @@ public class Doctor extends User{
         this.roles.add(role);
     }
 
+    @Transient
+    private double scoresAverage;
 
-    /*@Transient
-    private int role;*/
+    public double getScoresAverage(){
+        double avg = 0;
+        for ( Score score : this.doctorScores) {
+            avg += score.getScore();
+        }
+
+        avg = avg / this.doctorScores.size();
+
+        return avg;
+    }
 
     // ------------------------------- RELATIONSHIPS ------------------------------- //
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
@@ -95,5 +105,4 @@ public class Doctor extends User{
 
     @OneToOne(mappedBy = "doctor")
     private PasswordResetTokenDoctor passwordResetTokenDoctor;
-
 }
