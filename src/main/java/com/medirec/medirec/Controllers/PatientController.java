@@ -4,12 +4,17 @@ import com.medirec.medirec.Dto.AccessRequestDto;
 import com.medirec.medirec.Dto.DoctorsListDto;
 import com.medirec.medirec.Dto.PatientUpdateInfoDto;
 import com.medirec.medirec.Dto.Response;
+import com.medirec.medirec.Dto.ScoreDto;
 import com.medirec.medirec.Models.Access;
 import com.medirec.medirec.Models.Doctor;
 import com.medirec.medirec.Models.Patient;
+import com.medirec.medirec.Models.Score;
+import com.medirec.medirec.Repositories.ScoreRepository;
 import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.Interfaces.AccessService;
+import com.medirec.medirec.Services.DoctorServiceImpl;
 import com.medirec.medirec.Services.PatientServiceImpl;
+import com.medirec.medirec.Services.ScoreServiceImpl;
 import com.medirec.medirec.Services.Interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +43,13 @@ public class PatientController {
     PatientServiceImpl patientService;
 
     @Autowired
+    DoctorServiceImpl doctorService;
+
+    @Autowired
     AccessService accessService;
+
+    @Autowired
+    ScoreServiceImpl scoreService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -146,6 +157,7 @@ public class PatientController {
                     null), HttpStatus.BAD_REQUEST);
         }
     }
+
     @ApiOperation(value = "Show a list of doctors that are treating a patient and were accepted by the patient")
     @GetMapping ("/prof={patientId}/mydoctors")
     public ResponseEntity myDoctors (@PathVariable("patientId") int patientId){
@@ -231,6 +243,93 @@ public class PatientController {
             results
         );
 
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "scores/{patientId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Send a score of a doctor")
+    public ResponseEntity<Response> sendScore(
+        @PathVariable("patientId") int patientId,
+        @RequestParam("doctorId") int doctorId,
+        @RequestParam("sessionToken") String sessionToken,
+        @RequestBody ScoreDto dto
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        Response response;
+
+        Doctor doctor = doctorService.getDoctorById(doctorId);
+        Patient patient = patientService.getPatientById(patientId);
+
+        if(doctor == null){
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No doctor found with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        if(patient == null){
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient found with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+        
+        Score score = new Score(dto);
+        score.setDoctor(doctor);
+        score.setPatient(patient);
+        scoreService.saveScore(score);
+        
+        response = new Response(HttpStatus.OK.toString(), "Score saved succesfully", null);
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "scores/{patientId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Update a score of a doctor")
+    public ResponseEntity<Response> updateScore(
+        @PathVariable("patientId") int patientId,
+        @RequestParam("doctorId") int doctorId,
+        @RequestParam("sessionToken") String sessionToken,
+        @RequestBody ScoreDto dto
+    ){
+        if(!jwtProvider.tokenValidation(sessionToken)){
+            Response tokenResponse = new Response(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Invalid session token",
+                null
+            );
+            return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        Response response;
+
+        Doctor doctor = doctorService.getDoctorById(doctorId);
+        Patient patient = patientService.getPatientById(patientId);
+
+        if(doctor == null){
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No doctor found with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        if(patient == null){
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient found with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+        
+        Score score = scoreService.getScoreById(dto.getScoreId());
+        if(score == null){
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No score found with such id", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        score.setOpinion(dto.getOpinion());
+        score.setScore(dto.getScore());
+        scoreService.saveScore(score);
+        
+        response = new Response(HttpStatus.OK.toString(), "Score updated succesfully", null);
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 }

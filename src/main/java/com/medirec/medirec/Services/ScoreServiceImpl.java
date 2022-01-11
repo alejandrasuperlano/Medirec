@@ -1,5 +1,8 @@
 package com.medirec.medirec.Services;
 
+import java.util.Optional;
+
+import com.medirec.medirec.Models.Score;
 import com.medirec.medirec.Repositories.ScoreRepository;
 import com.medirec.medirec.Services.Interfaces.ScoreService;
 
@@ -11,4 +14,18 @@ public class ScoreServiceImpl implements ScoreService{
     
     @Autowired
     private ScoreRepository repository;
+
+    public void saveScore(Score score){
+        repository.save(score);
+    }
+
+    public Score getScoreById(int id){
+        Optional<Score> score = repository.findById(id);
+        
+        if(score.get() == null){
+            return null;
+        }else{
+            return score.get();
+        }
+    }
 }
