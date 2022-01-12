@@ -111,6 +111,28 @@ public class AccessServiceImpl implements AccessService {
     }
 
     @Override
+    public List<Integer> getMyPatientsIds(int doctorId) throws Exception{
+        try{
+            List<Access> requesters = accessRepository.getMyPatientsByDoctorId(doctorId);
+
+            if (requesters == null){
+                return null;
+            }
+
+            List<Integer> myPatientsIds = new ArrayList<>();
+            for (Access element : requesters){
+                
+                myPatientsIds.add(element.getPatient().getUserId());
+            }
+            return myPatientsIds;
+
+        } catch (Exception e){
+            throw new Exception("No se ha encontrado al usuario");
+        }
+
+    }
+
+    @Override
     public void acceptRequest(int patientId, int doctorId) throws Exception {
         try{
             Access requestDB = accessRepository.getAccessByPatientIdAndDoctorId(doctorId, patientId).get();
