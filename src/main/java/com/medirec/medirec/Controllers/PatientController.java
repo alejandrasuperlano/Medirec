@@ -1,18 +1,12 @@
 package com.medirec.medirec.Controllers;
 
-import com.medirec.medirec.Dto.AccessRequestDto;
-import com.medirec.medirec.Dto.DoctorsListDto;
-import com.medirec.medirec.Dto.PatientUpdateInfoDto;
-import com.medirec.medirec.Dto.Response;
-import com.medirec.medirec.Dto.ScoreDto;
-import com.medirec.medirec.Models.Access;
-import com.medirec.medirec.Models.Doctor;
-import com.medirec.medirec.Models.Patient;
-import com.medirec.medirec.Models.Score;
+import com.medirec.medirec.Dto.*;
+import com.medirec.medirec.Models.*;
 import com.medirec.medirec.Repositories.ScoreRepository;
 import com.medirec.medirec.Security.JWT.JwtProvider;
 import com.medirec.medirec.Services.Interfaces.AccessService;
 import com.medirec.medirec.Services.DoctorServiceImpl;
+import com.medirec.medirec.Services.Interfaces.SymptomService;
 import com.medirec.medirec.Services.PatientServiceImpl;
 import com.medirec.medirec.Services.ScoreServiceImpl;
 import com.medirec.medirec.Services.Interfaces.UserService;
@@ -21,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
@@ -50,6 +45,9 @@ public class PatientController {
 
     @Autowired
     ScoreServiceImpl scoreService;
+
+    @Autowired
+    SymptomService symptomService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -332,4 +330,36 @@ public class PatientController {
         response = new Response(HttpStatus.OK.toString(), "Score updated succesfully", null);
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Register the symptoms and medicines consumed by a specific patient by day")
+    @PostMapping ("/prof={patientId}/symptoms/register")
+    public ResponseEntity registerSymptom (@PathVariable("patientId") int patientId,
+                                           @RequestBody SymptomDto symptomDto,
+                                           @RequestParam("sessionToken") String sessionToken,
+                                           BindingResult result){
+        if(!result.hasErrors()){
+            if(!jwtProvider.tokenValidation(sessionToken)){
+                return new ResponseEntity(new Response("BAD", "El token de sesión ha expirado " +
+                        "o no es un token válido", null), HttpStatus.BAD_REQUEST);
+            } else {
+                try{
+                    Symptom symptom = new Symptom();
+                    symptom = modelMapper.map(symptomDto, Symptom.class);
+                    if(symptomService.saveSymptom(symptom, patientId) != null){
+                        return new ResponseEntity(new Response("OK", "Síntomas y medicinas registradas con éxito",
+                                null), HttpStatus.ACCEPTED);
+                    }
+                } catch (Exception e){
+                    return new ResponseEntity(new Response("BAD", e.getMessage(),
+                            null), HttpStatus.BAD_REQUEST);
+                }
+                return new ResponseEntity(new Response("BAD", "No se han registrado los síntomas y/o medicinas",
+                        null), HttpStatus.ACCEPTED);
+            }
+        } else{
+            return new ResponseEntity(new Response("BAD", "Hay uno o más campos en blanco",
+                    symptomDto), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
