@@ -30,11 +30,16 @@ public class Symptom {
     private String description;
 
     @Column()
+    @NotBlank
+    private String medicine;
+
+    @Column()
     @NotNull
     private Date date;
 
-    public Symptom(String description, Date date) {
+    public Symptom(String description, String medicine,Date date) {
         this.description = description;
+        this.medicine = medicine;
         this.date = date;
     }
 
