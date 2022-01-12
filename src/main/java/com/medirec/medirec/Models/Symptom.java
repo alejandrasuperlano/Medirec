@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -50,5 +52,6 @@ public class Symptom {
         name = "medicalHistoryId",
         referencedColumnName = "medicalHistoryId"
     )
+    @JsonIgnore
     private MedicalHistory medicalHistory;
 }
