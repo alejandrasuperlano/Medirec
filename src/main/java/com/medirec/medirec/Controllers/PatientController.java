@@ -362,4 +362,46 @@ public class PatientController {
         }
     }
 
+    @ApiOperation(value = "Get doctor's score sent by a specific patient")
+    @GetMapping(path = "scores/{patientId}")
+    public ResponseEntity<Response> getDoctorScore(
+        @PathVariable("patientId") int patientId,
+        @RequestParam("doctorId") int doctorId,
+        @RequestParam("sessionToken") String sessionToken){
+            if(!jwtProvider.tokenValidation(sessionToken)){
+                Response tokenResponse = new Response(
+                    HttpStatus.BAD_REQUEST.toString(),
+                    "Invalid session token",
+                    null
+                );
+                return new ResponseEntity<Response>(tokenResponse, HttpStatus.BAD_REQUEST);
+            }
+
+            Response response;
+
+            Doctor doctor = doctorService.getDoctorById(doctorId);
+            Patient patient = patientService.getPatientById(patientId);
+
+            if(doctor == null){
+                response = new Response(HttpStatus.BAD_REQUEST.toString(), "No doctor found with such id", null);
+                return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            if(patient == null){
+                response = new Response(HttpStatus.BAD_REQUEST.toString(), "No patient found with such id", null);
+                return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            }
+            
+            List<Score> patientReviews = patient.getPatientReviews();
+
+            for (Score score : patientReviews) {
+                if(score.getDoctor().getUserId() == doctorId){
+                    response = new Response(HttpStatus.OK.toString(), "Score fetched succesfully", score);
+                    return new ResponseEntity<Response>(response, HttpStatus.OK);
+                }
+            }
+
+            response = new Response(HttpStatus.BAD_REQUEST.toString(), "No score found", null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
 }
