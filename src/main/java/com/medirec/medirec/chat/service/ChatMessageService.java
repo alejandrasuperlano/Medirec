@@ -25,7 +25,7 @@ public class ChatMessageService {
 
     public long countNewMessages(String senderId, String recipientId) {
         return repository.countBySenderIdAndRecipientIdAndStatus(
-                senderId, recipientId, MessageStatus.RECEIVED);
+                senderId, recipientId, MessageStatus.RECEIVED.toString());
     }
 
     public List<ChatMessage> findChatMessages(String senderId, String recipientId) throws Exception{

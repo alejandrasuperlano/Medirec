@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatMessageRepository extends CrudRepository<ChatMessage, String>{
     long countBySenderIdAndRecipientIdAndStatus(
-            String senderId, String recipientId, MessageStatus status);
+            String senderId, String recipientId, String status);
 
     List<ChatMessage> findByChatId(String chatId);
 
