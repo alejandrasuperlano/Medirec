@@ -20,6 +20,8 @@ public interface ChatMessageRepository extends CrudRepository<ChatMessage, Strin
 
     List<ChatMessage> findByChatId(String chatId);
 
+    List<ChatMessage> findByChatIdAndStatus(String chatId, String status);
+
     @Modifying
     @Transactional
     @Query(

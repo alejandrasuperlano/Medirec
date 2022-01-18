@@ -54,7 +54,7 @@ public class ChatController {
                 .ok(chatMessageService.countNewMessages(senderId, recipientId));
     }
 
-    @GetMapping("/messages/{senderId}/{recipientId}")
+    @GetMapping("/messages/{senderId}/{recipientId}/all")
     public ResponseEntity<Response> findChatMessages(
             @PathVariable String senderId, @PathVariable String recipientId) {
         Response response;
@@ -62,6 +62,28 @@ public class ChatController {
 
         try {
             messages = chatMessageService.findChatMessages(senderId,
+                    recipientId);
+        } catch (Exception e) {
+            response = new Response(HttpStatus.BAD_REQUEST.toString(),
+                    "No se pudo encontrar el chat asociado a los id's de los usuarios",
+                    messages);
+            return new ResponseEntity<Response>(response,
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        response = new Response(HttpStatus.OK.toString(),
+                "Estos son todos los mensajes", messages);
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/messages/{senderId}/{recipientId}/new")
+    public ResponseEntity<Response> findNewChatMessages(
+            @PathVariable String senderId, @PathVariable String recipientId) {
+        Response response;
+        List<ChatMessage> messages = new ArrayList<>();
+
+        try {
+            messages = chatMessageService.findNewChatMessages(senderId,
                     recipientId);
         } catch (Exception e) {
             response = new Response(HttpStatus.BAD_REQUEST.toString(),

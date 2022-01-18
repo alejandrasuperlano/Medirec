@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChatMessageService {
-    
-    @Autowired private ChatMessageRepository repository;
-    @Autowired private ChatRoomService chatRoomService;
+
+    @Autowired
+    private ChatMessageRepository repository;
+    @Autowired
+    private ChatRoomService chatRoomService;
 
     public ChatMessage save(ChatMessage chatMessage) {
         chatMessage.setStatus(MessageStatus.RECEIVED.toString());
@@ -24,27 +26,51 @@ public class ChatMessageService {
     }
 
     public long countNewMessages(String senderId, String recipientId) {
-        return repository.countBySenderIdAndRecipientIdAndStatus(
-                senderId, recipientId, MessageStatus.RECEIVED.toString());
+        return repository.countBySenderIdAndRecipientIdAndStatus(senderId,
+                recipientId, MessageStatus.RECEIVED.toString());
     }
 
-    public List<ChatMessage> findChatMessages(String senderId, String recipientId) throws Exception{
-        Optional<String> chatIdOptional = chatRoomService.getChatId(senderId, recipientId, false);
-        if(!chatIdOptional.isPresent()){
+    public List<ChatMessage> findChatMessages(String senderId,
+            String recipientId) throws Exception {
+        Optional<String> chatIdOptional = chatRoomService.getChatId(senderId,
+                recipientId, false);
+        if (!chatIdOptional.isPresent()) {
             throw new Exception("No se pudo encontrar el chat");
         }
 
-        List<ChatMessage> messages =
-                chatIdOptional.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
+        List<ChatMessage> messages = chatIdOptional
+                .map(cId -> repository.findByChatId(cId))
+                .orElse(new ArrayList<>());
 
-        if(messages.size() > 0) {
+        if (messages.size() > 0) {
             updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
         }
 
         return messages;
     }
 
-    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
+    public List<ChatMessage> findNewChatMessages(String senderId,
+            String recipientId) throws Exception {
+        Optional<String> chatIdOptional = chatRoomService.getChatId(senderId,
+                recipientId, false);
+        if (!chatIdOptional.isPresent()) {
+            throw new Exception("No se pudo encontrar el chat");
+        }
+
+        List<ChatMessage> messages = chatIdOptional
+                .map(cId -> repository.findByChatIdAndStatus(cId,
+                        MessageStatus.RECEIVED.toString()))
+                .orElse(new ArrayList<>());
+
+        if (messages.size() > 0) {
+            updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
+        }
+
+        return messages;
+    }
+
+    public void updateStatuses(String senderId, String recipientId,
+            MessageStatus status) {
 
         repository.updateStatuses(status.toString(), senderId, recipientId);
     }
