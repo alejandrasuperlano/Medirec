@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ChatNotification {
-    private String id;
+    private int id;
     private int senderId;
     private String senderName;
 }
