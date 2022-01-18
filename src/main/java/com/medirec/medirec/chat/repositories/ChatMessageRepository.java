@@ -2,6 +2,8 @@ package com.medirec.medirec.chat.repositories;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import com.medirec.medirec.chat.models.ChatMessage;
 import com.medirec.medirec.chat.models.MessageStatus;
 
@@ -14,15 +16,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatMessageRepository extends CrudRepository<ChatMessage, String>{
     long countBySenderIdAndRecipientIdAndStatus(
-            int senderId, int recipientId, MessageStatus status);
+            String senderId, String recipientId, MessageStatus status);
 
     List<ChatMessage> findByChatId(String chatId);
 
+    @Modifying
+    @Transactional
     @Query(
-        value = "UPDATE chatmessage SET status = :messageStatus WHERE senderId = :senderId AND recipientId = :recipientId",
+        value = "UPDATE chat_message SET status = :messageStatus WHERE sender_id = :senderId AND recipient_id = :recipientId",
         nativeQuery = true
     )
-    @Modifying
     public void updateStatuses(
         @Param("messageStatus") String status,
         @Param("senderId") String senderId,

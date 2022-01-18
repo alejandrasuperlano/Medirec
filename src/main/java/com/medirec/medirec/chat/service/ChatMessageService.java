@@ -18,12 +18,12 @@ public class ChatMessageService {
     @Autowired private ChatRoomService chatRoomService;
 
     public ChatMessage save(ChatMessage chatMessage) {
-        chatMessage.setStatus(MessageStatus.RECEIVED);
+        chatMessage.setStatus(MessageStatus.RECEIVED.toString());
         repository.save(chatMessage);
         return chatMessage;
     }
 
-    public long countNewMessages(int senderId, int recipientId) {
+    public long countNewMessages(String senderId, String recipientId) {
         return repository.countBySenderIdAndRecipientIdAndStatus(
                 senderId, recipientId, MessageStatus.RECEIVED);
     }
@@ -34,8 +34,6 @@ public class ChatMessageService {
             throw new Exception("No se pudo encontrar el chat");
         }
 
-        String chatId = chatIdOptional.get();
-
         List<ChatMessage> messages =
                 chatIdOptional.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
 
@@ -44,17 +42,6 @@ public class ChatMessageService {
         }
 
         return messages;
-    }
-
-    public ChatMessage findById(String id) throws Exception {
-        return repository
-                .findById(id)
-                .map(chatMessage -> {
-                    chatMessage.setStatus(MessageStatus.DELIVERED);
-                    return repository.save(chatMessage);
-                })
-                .orElseThrow(() ->
-                        new Exception("No se pudo encontrar el mensaje con id (" + id + ")"));
     }
 
     public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
