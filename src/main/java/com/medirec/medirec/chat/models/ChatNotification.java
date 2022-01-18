@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatNotification {
     private int id;
-    private int senderId;
+    private String senderId;
     private String senderName;
 }

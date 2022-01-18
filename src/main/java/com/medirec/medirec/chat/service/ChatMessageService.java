@@ -28,7 +28,7 @@ public class ChatMessageService {
                 senderId, recipientId, MessageStatus.RECEIVED);
     }
 
-    public List<ChatMessage> findChatMessages(int senderId, int recipientId) throws Exception{
+    public List<ChatMessage> findChatMessages(String senderId, String recipientId) throws Exception{
         Optional<String> chatIdOptional = chatRoomService.getChatId(senderId, recipientId, false);
         if(!chatIdOptional.isPresent()){
             throw new Exception("No se pudo encontrar el chat");
@@ -57,7 +57,7 @@ public class ChatMessageService {
                         new Exception("No se pudo encontrar el mensaje con id (" + id + ")"));
     }
 
-    public void updateStatuses(int senderId, int recipientId, MessageStatus status) {
+    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
 
         repository.updateStatuses(status.toString(), senderId, recipientId);
     }

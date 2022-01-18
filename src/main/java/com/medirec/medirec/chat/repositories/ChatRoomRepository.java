@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatRoomRepository extends CrudRepository<ChatRoom, String>{
     
-    Optional<ChatRoom> findBySenderIdAndRecipientId(int senderId, int recipientId);
+    Optional<ChatRoom> findBySenderIdAndRecipientId(String senderId, String recipientId);
 }

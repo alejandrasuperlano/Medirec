@@ -25,7 +25,7 @@ public interface ChatMessageRepository extends CrudRepository<ChatMessage, Strin
     @Modifying
     public void updateStatuses(
         @Param("messageStatus") String status,
-        @Param("senderId") int senderId,
-        @Param("recipientId") int recipientId
+        @Param("senderId") String senderId,
+        @Param("recipientId") String recipientId
     );
 }

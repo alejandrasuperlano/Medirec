@@ -14,7 +14,7 @@ public class ChatRoomService {
     @Autowired ChatRoomRepository chatRoomRepository;
 
     public Optional<String> getChatId(
-        int senderId, int recipientId, boolean createIfNotExist) {
+        String senderId, String recipientId, boolean createIfNotExist) {
         
         Optional<ChatRoom> chatRoom = chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
         
