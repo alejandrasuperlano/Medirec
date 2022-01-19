@@ -1,0 +1,60 @@
+package com.medirec.medirec.chat.repositories;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import com.medirec.medirec.chat.models.ChatMessage;
+import com.medirec.medirec.chat.models.MessageStatus;
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ChatMessageRepository extends CrudRepository<ChatMessage, String>{
+    
+    @Query(
+        value = "SELECT sender_id senderId, count(id) messageCount FROM chat_message WHERE recipient_id = :recipientId AND status = :messageStatus GROUP BY sender_id",
+        nativeQuery = true
+        )
+    List<CountNewMessagesDto> countNewMessages(
+        @Param("recipientId") String recipientId,
+        @Param("messageStatus") String status
+    );
+
+    public static interface CountNewMessagesDto {
+
+        String getSenderId();
+
+        int getMessageCount();
+    }
+
+
+    List<ChatMessage> findByChatId(String chatId);
+
+    
+    @Query(
+        value = "SELECT * FROM chat_message WHERE sender_id = :senderId AND recipient_id = :recipientId AND status = :messageStatus",
+        nativeQuery = true
+    )
+    public List<ChatMessage> getNewMessages( 
+        @Param("senderId") String senderId,
+        @Param("recipientId") String recipientId,
+        @Param("messageStatus") String status
+    );
+
+    @Modifying
+    @Transactional
+    @Query(
+        value = "UPDATE chat_message SET status = :messageStatus WHERE sender_id = :senderId AND recipient_id = :recipientId",
+        nativeQuery = true
+    )
+    public void updateStatuses(
+        @Param("messageStatus") String status,
+        @Param("senderId") String senderId,
+        @Param("recipientId") String recipientId
+    );
+}
