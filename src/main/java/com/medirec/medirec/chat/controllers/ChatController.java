@@ -8,6 +8,7 @@ import com.medirec.medirec.Dto.Response;
 import com.medirec.medirec.chat.models.ChatMessage;
 import com.medirec.medirec.chat.models.ChatNotification;
 import com.medirec.medirec.chat.models.MessageStatus;
+import com.medirec.medirec.chat.repositories.ChatMessageRepository.CountNewMessagesDto;
 import com.medirec.medirec.chat.service.ChatMessageService;
 import com.medirec.medirec.chat.service.ChatRoomService;
 
@@ -47,11 +48,12 @@ public class ChatController {
     }
 
     @GetMapping("/messages/{recipientId}/count")
-    public ResponseEntity<Long> countNewMessages(@PathVariable String senderId,
-            @PathVariable String recipientId) {
+    public ResponseEntity<Response> countNewMessages(@PathVariable String recipientId) {
+        
+        List<CountNewMessagesDto> countList = chatMessageService.countNewMessages(recipientId);
 
-        return ResponseEntity
-                .ok(chatMessageService.countNewMessages(senderId, recipientId));
+        Response response = new Response(HttpStatus.OK.toString(), "Esta es la cantidad de mensajes nuevos", countList);
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}/all")

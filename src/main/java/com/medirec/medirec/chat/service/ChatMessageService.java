@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.medirec.medirec.chat.models.ChatMessage;
 import com.medirec.medirec.chat.models.MessageStatus;
 import com.medirec.medirec.chat.repositories.ChatMessageRepository;
+import com.medirec.medirec.chat.repositories.ChatMessageRepository.CountNewMessagesDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ public class ChatMessageService {
         return chatMessage;
     }
 
-    public long countNewMessages(String senderId, String recipientId) {
-        return repository.countBySenderIdAndRecipientIdAndStatus(senderId,
+    public List<CountNewMessagesDto> countNewMessages(String recipientId) {
+        return repository.countNewMessages(
                 recipientId, MessageStatus.RECEIVED.toString());
     }
 

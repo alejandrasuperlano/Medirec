@@ -15,8 +15,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatMessageRepository extends CrudRepository<ChatMessage, String>{
-    long countBySenderIdAndRecipientIdAndStatus(
-            String senderId, String recipientId, String status);
+    
+    @Query(
+        value = "SELECT sender_id senderId, count(id) messageCount FROM chat_message WHERE recipient_id = :recipientId AND status = :messageStatus GROUP BY sender_id",
+        nativeQuery = true
+        )
+    List<CountNewMessagesDto> countNewMessages(
+        @Param("recipientId") String recipientId,
+        @Param("messageStatus") String status
+    );
+
+    public static interface CountNewMessagesDto {
+
+        String getSenderId();
+
+        int getMessageCount();
+    }
+
 
     List<ChatMessage> findByChatId(String chatId);
 
