@@ -20,7 +20,16 @@ public interface ChatMessageRepository extends CrudRepository<ChatMessage, Strin
 
     List<ChatMessage> findByChatId(String chatId);
 
-    List<ChatMessage> findByChatIdAndStatus(String chatId, String status);
+    
+    @Query(
+        value = "SELECT * FROM chat_message WHERE sender_id = :senderId AND recipient_id = :recipientId AND status = :messageStatus",
+        nativeQuery = true
+    )
+    public List<ChatMessage> getNewMessages( 
+        @Param("senderId") String senderId,
+        @Param("recipientId") String recipientId,
+        @Param("messageStatus") String status
+    );
 
     @Modifying
     @Transactional

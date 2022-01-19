@@ -46,7 +46,7 @@ public class ChatController {
                         saved.getSenderName()));
     }
 
-    @GetMapping("/messages/{senderId}/{recipientId}/count")
+    @GetMapping("/messages/{recipientId}/count")
     public ResponseEntity<Long> countNewMessages(@PathVariable String senderId,
             @PathVariable String recipientId) {
 
@@ -61,7 +61,7 @@ public class ChatController {
         List<ChatMessage> messages = new ArrayList<>();
 
         try {
-            messages = chatMessageService.findChatMessages(senderId,
+            messages = chatMessageService.findAllMessages(senderId,
                     recipientId);
         } catch (Exception e) {
             response = new Response(HttpStatus.BAD_REQUEST.toString(),

@@ -30,7 +30,7 @@ public class ChatMessageService {
                 recipientId, MessageStatus.RECEIVED.toString());
     }
 
-    public List<ChatMessage> findChatMessages(String senderId,
+    public List<ChatMessage> findAllMessages(String senderId,
             String recipientId) throws Exception {
         Optional<String> chatIdOptional = chatRoomService.getChatId(senderId,
                 recipientId, false);
@@ -57,10 +57,8 @@ public class ChatMessageService {
             throw new Exception("No se pudo encontrar el chat");
         }
 
-        List<ChatMessage> messages = chatIdOptional
-                .map(cId -> repository.findByChatIdAndStatus(cId,
-                        MessageStatus.RECEIVED.toString()))
-                .orElse(new ArrayList<>());
+        List<ChatMessage> messages = repository.getNewMessages(senderId, recipientId,
+                        MessageStatus.RECEIVED.toString());
 
         if (messages.size() > 0) {
             updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
