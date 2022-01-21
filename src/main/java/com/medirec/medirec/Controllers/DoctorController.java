@@ -247,6 +247,6 @@ public class DoctorController {
         }
 
         response = new Response(HttpStatus.OK.toString(), "These are the patient's latest symptoms", patientsSymptoms);
-        return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 }
