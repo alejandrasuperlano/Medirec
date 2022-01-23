@@ -193,8 +193,8 @@ public class DoctorController {
         }
     }
 
-    @ApiOperation(value = "Get patients latest symptoms")
-    @GetMapping(path = "{doctorId}/mypatients/latestSymptoms")
+    @ApiOperation(value = "Get patients symptoms")
+    @GetMapping(path = "{doctorId}/mypatients/symptoms")
     public ResponseEntity<Response> getLatestSymptoms(
         @PathVariable("doctorId") int doctorId,
         @RequestParam("sessionToken") String sessionToken
@@ -221,32 +221,18 @@ public class DoctorController {
         }
         
         List<PatientSymptomsDto> patientsSymptoms = new ArrayList<>();
-        
-        Calendar maxDateCalendar = Calendar.getInstance();
-        maxDateCalendar.add(Calendar.DATE, -5);
-        Date maxDate = maxDateCalendar.getTime();
 
         for (int patientId : patientsIds) {
             Patient patient = patientService.getPatientById(patientId);
             List<Symptom> symptoms = patient.getPatientMedicalHistory().getSymptoms();
 
-            List<Symptom> latestSymptoms = new ArrayList<>();
-
-            for (Symptom symptom : symptoms) {
-
-
-                if(symptom.getDate().after(maxDate)){
-                    latestSymptoms.add(symptom);
-                }
-            }
-
             PatientSymptomsDto dto = new PatientSymptomsDto();
             dto.setPatientName(patient.getUserFirstName() + " " + patient.getUserLastName());
-            dto.setSymptoms(latestSymptoms);
+            dto.setSymptoms(symptoms);
             patientsSymptoms.add(dto);
         }
 
-        response = new Response(HttpStatus.OK.toString(), "These are the patient's latest symptoms", patientsSymptoms);
+        response = new Response(HttpStatus.OK.toString(), "These are the patient's symptoms", patientsSymptoms);
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 }
