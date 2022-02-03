@@ -164,7 +164,7 @@ public class PasswordRecoveryController {
     /* --------------------------- EMAIL FOR PATIENTS --------------------------- */
     private SimpleMailMessage constructResetTokenEmail(
             String contextPath, Locale locale, String token, Patient patient) {
-        String url = "http://localhost:8080/recuperacion-contrasena/paciente?token=" + token;
+        String url = "https://medirec-heroku.herokuapp.com/recuperacion-contrasena/paciente?token=" + token;
         return constructEmail("Reset Password", "Hola! Accede a este link para" +
                 "poder recuperar tu contraseña" + " \r\n" + url, patient);
     }
@@ -182,7 +182,7 @@ public class PasswordRecoveryController {
     /* --------------------------- EMAIL FOR DOCTORS --------------------------- */
     private SimpleMailMessage constructResetTokenEmail(
             String contextPath, Locale locale, String token, Doctor doctor) {
-        String url = "http://localhost:8080/recuperacion-contrasena/doctor?token=" + token;
+        String url = "https://medirec-heroku.herokuapp.com/recuperacion-contrasena/doctor?token=" + token;
         return constructEmail("Reset Password", "Hola! Accede a este link para " +
                 "poder recuperar tu contraseña" + " \r\n" + url, doctor);
     }
